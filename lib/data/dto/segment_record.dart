@@ -1,0 +1,21 @@
+import 'package:race_tracker/model/segment_record.dart';
+
+class SegmentRecordDto {
+  static Map<String, dynamic> toJson(SegmentRecord record) {
+    return {
+      'bib': record.bib,
+      'segment': record.segment.name, // Save enum as string
+      'startTime': record.startTime.toIso8601String(),
+      if (record.finishTime != null) 'finishTime': record.finishTime!.toIso8601String(),
+    };
+  }
+
+  static SegmentRecord fromJson(Map<String, dynamic> json) {
+    return SegmentRecord(
+      bib: json['bib'],
+      segment: Segment.values.firstWhere((s) => s.name == json['segment']),
+      startTime: DateTime.parse(json['startTime']),
+      finishTime: json['finishTime'] != null ? DateTime.parse(json['finishTime']) : null,
+    );
+  }
+}
