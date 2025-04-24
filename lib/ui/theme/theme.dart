@@ -12,6 +12,10 @@ class RTColors {
   static Color white = Colors.white;
   static Color black = Colors.black;
 
+  static Color error = const Color(0xFFEE3B2B);
+  static Color success =const Color(0xFF82DD55);
+  static Color warning = const Color(0xFFFAC752);
+
   static Color get backGroundColor {
     return RTColors.bgColor;
   }
