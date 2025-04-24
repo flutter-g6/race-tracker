@@ -41,7 +41,7 @@ class RTButton extends StatelessWidget {
     // Create the button icon - if any
     List<Widget> children = [];
     if (icon != null) {
-      children.add(Icon(icon, size: 20, color: iconColor));
+      children.add(Icon(icon, size: RTSizes.smallIcon, color: iconColor));
       children.add(SizedBox(width: RTSpacings.s));
     }
 
@@ -58,9 +58,9 @@ class RTButton extends StatelessWidget {
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
           backgroundColor: backgroundColor,
-          padding: EdgeInsets.symmetric(vertical: 20),
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(RTSpacings.radius),
+            borderRadius: BorderRadius.circular(RTSpacings.radiusSmall),
           ),
           side: border,
         ),

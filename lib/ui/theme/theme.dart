@@ -62,6 +62,7 @@ class RTSpacings {
   static const double xl = 32;
   static const double xxl = 40;
 
+  static const double radiusSmall = 12;
   static const double radius = 16;
   static const double radiusLarge = 24;
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class NavigationProvider extends ChangeNotifier {
+class BottomNavigationProvider extends ChangeNotifier {
   int _selectedIndex = 0;
 
   int get selectedIndex => _selectedIndex;
