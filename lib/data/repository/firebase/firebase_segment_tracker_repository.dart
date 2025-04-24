@@ -60,4 +60,17 @@ class FirebaseSegmentTrackerRepository extends SegmentTrackerRepository {
       await segmentRef.child(participant.bib).set(SegmentRecordDto.toJson(record));
     }
   }
+
+  @override
+  Future<void> unTrackStart(String raceId, String bib, Segment segment) async {
+    final segmentStartRef = _db.child('race_segments/$raceId/$segment/$bib/startTime');
+    await segmentStartRef.remove();
+  }
+
+  @override
+  Future<void> unTrackFinish(String raceId, String bib, Segment segment) async {
+    final segmentFinishRef = _db.child('race_segments/$raceId/$segment/$bib/finishTime');
+    await segmentFinishRef.remove();
+  }
+
 }
