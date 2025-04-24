@@ -28,4 +28,13 @@ class FirebaseRaceRepository extends RaceRepository {
     final statusString = snapshot.value as String;
     return RaceStatus.values.firstWhere((e) => e.name == statusString);
   }
+
+  @override
+  Stream<RaceStatus> watchRaceStatus(String raceId) {
+    return _raceRef.child(raceId).child('status').onValue.map((event) {
+      final statusString = event.snapshot.value as String;
+      return RaceStatus.values.firstWhere((e) => e.name == statusString);
+    });
+  }
+
 }
