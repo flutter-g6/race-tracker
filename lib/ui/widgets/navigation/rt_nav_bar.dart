@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../provider/navigation_provider.dart';
 import '../../theme/theme.dart';
 
-class RTNavBar extends StatefulWidget {
+class RTNavBar extends StatelessWidget {
   const RTNavBar({super.key});
 
-  @override
-  State<RTNavBar> createState() => _RTNavBarState();
-}
-
-class _RTNavBarState extends State<RTNavBar> {
   // Define routes and icons
   static final List<String> _routes = ['/home', '/tracking', '/result'];
 
@@ -19,32 +16,26 @@ class _RTNavBarState extends State<RTNavBar> {
     Icons.score,
   ];
 
-  // Keep track of the selected index
-  int _selectedIndex = 0;
-
-  void _onDestinationSelected(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
-    // Navigate to the selected route
-    Navigator.pushNamed(context, _routes[index]);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final navigationProvider = Provider.of<NavigationProvider>(context);
+    final selectedIndex = navigationProvider.selectedIndex;
+
     return NavigationBar(
       backgroundColor: RTColors.white,
       indicatorColor: RTColors.primary,
       labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-      selectedIndex: _selectedIndex,
-      onDestinationSelected: _onDestinationSelected,
+      selectedIndex: selectedIndex,
+      onDestinationSelected: (index) {
+        navigationProvider.setIndex(index);
+        Navigator.pushReplacementNamed(context, _routes[index]);
+      },
       destinations: List.generate(
         _icons.length,
         (index) => NavigationDestination(
           icon: Icon(
             _icons[index],
-            color: _selectedIndex == index ? Colors.white : RTColors.black,
+            color: selectedIndex == index ? Colors.white : RTColors.black,
           ),
           selectedIcon: Icon(_icons[index], color: Colors.white),
           label: '',

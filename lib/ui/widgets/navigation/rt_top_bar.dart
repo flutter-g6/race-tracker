@@ -19,7 +19,7 @@ class RTTopBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: RTColors.backgroundAccent,
+      backgroundColor: RTColors.secondary,
       elevation: 0,
       centerTitle: centerTitle,
       leading: leading,

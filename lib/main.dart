@@ -2,13 +2,17 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'firebase_options.dart';
+import 'provider_scope.dart';
+import 'ui/screens/home_screen.dart';
+import 'ui/screens/result_screen.dart';
+import 'ui/screens/tracking_screen.dart';
 import 'ui/theme/theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  runApp(RaceTrackerApp());
+  runApp(const ProviderScope(child: RaceTrackerApp()));
 }
 
 class RaceTrackerApp extends StatelessWidget {
@@ -19,7 +23,12 @@ class RaceTrackerApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: appTheme,
-      home: Scaffold(appBar: AppBar(), body: Text("This work for now")),
+      initialRoute: '/home',
+      routes: {
+        '/home': (context) => const HomeScreen(),
+        '/tracking': (context) => const TrackingScreen(),
+        '/result': (context) => const ResultScreen(),
+      },
     );
   }
 }
