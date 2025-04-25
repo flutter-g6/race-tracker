@@ -18,7 +18,7 @@ class FirebaseSegmentTrackerRepository extends SegmentTrackerRepository {
   }
 
   @override
-  Future<void> startSegment(String raceId, String bib, Segment segment) async {
+  Future<void> startSegment(String raceId, int bib, Segment segment) async {
     if (!await _isRaceOngoing(raceId)) {
       throw Exception("Race is not ongoing");
     }
@@ -34,7 +34,7 @@ class FirebaseSegmentTrackerRepository extends SegmentTrackerRepository {
   }
 
   @override
-  Future<void> finishSegment(String raceId, String bib, Segment segment) async {
+  Future<void> finishSegment(String raceId, int bib, Segment segment) async {
     final finishTime = DateTime.now().toIso8601String();
     final finishRef = _db.child('race_segments/$raceId/${segment.name}/$bib/finishTime');
     await finishRef.set(finishTime);
@@ -57,18 +57,18 @@ class FirebaseSegmentTrackerRepository extends SegmentTrackerRepository {
         startTime: DateTime.now(),
       );
 
-      await segmentRef.child(participant.bib).set(SegmentRecordDto.toJson(record));
+      await segmentRef.child(participant.bib.toString()).set(SegmentRecordDto.toJson(record));
     }
   }
 
   @override
-  Future<void> unTrackStart(String raceId, String bib, Segment segment) async {
+  Future<void> unTrackStart(String raceId, int bib, Segment segment) async {
     final segmentStartRef = _db.child('race_segments/$raceId/$segment/$bib/startTime');
     await segmentStartRef.remove();
   }
 
   @override
-  Future<void> unTrackFinish(String raceId, String bib, Segment segment) async {
+  Future<void> unTrackFinish(String raceId, int bib, Segment segment) async {
     final segmentFinishRef = _db.child('race_segments/$raceId/$segment/$bib/finishTime');
     await segmentFinishRef.remove();
   }

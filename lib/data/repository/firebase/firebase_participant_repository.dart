@@ -21,7 +21,28 @@ class FirebaseParticipantRepository extends ParticipantRepository {
   @override
   Future<void> addParticipant(Participant participant) async {
     final String id = const Uuid().v4();
-    final Participant newParticipant = participant.copyWith(id: id);
+
+    int bib = participant.bib;
+
+    if (bib == 0) {
+      final snapshot = await _databaseRef.get();
+      int maxBib = 0;
+
+      if (snapshot.exists) {
+        final data = snapshot.value as Map<dynamic, dynamic>;
+        for (final value in data.values) {
+          final p = Map<String, dynamic>.from(value);
+          final existingBib = p['bib'] as int? ?? 0;
+          if (existingBib > maxBib) {
+            maxBib = existingBib;
+          }
+        }
+      }
+
+      bib = maxBib + 1;
+    }
+
+    final Participant newParticipant = participant.copyWith(id: id, bib: bib);
     await _databaseRef.child(id).set(ParticipantDto.toJson(newParticipant));
   }
 

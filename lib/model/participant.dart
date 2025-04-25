@@ -1,6 +1,6 @@
 class Participant {
   final String id;
-  final String bib;
+  final int bib;
   final String firstName;
   final String lastName;
   final int age;
@@ -17,7 +17,7 @@ class Participant {
 
   Participant copyWith({
     String? id,
-    String? bib,
+    int? bib,
     String? firstName,
     String? lastName,
     int? age,
