@@ -24,7 +24,11 @@ class FirebaseParticipantRepository extends ParticipantRepository {
       )
       .toList();
 
-    participants.sort((a, b) => int.parse(a.bib).compareTo(int.parse(b.bib)));
+    participants.sort((a, b) {
+      final bibA = int.tryParse(a.bib) ?? 0;
+      final bibB = int.tryParse(b.bib) ?? 0;
+      return bibA.compareTo(bibB);
+    });
 
     return participants;
   }
