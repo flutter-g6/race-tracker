@@ -15,14 +15,18 @@ class FirebaseParticipantRepository extends ParticipantRepository {
     if (!snapshot.exists) return [];
 
     final data = snapshot.value as Map<dynamic, dynamic>;
-    return data.entries
-        .map(
-          (entry) => ParticipantDto.fromJson(
-            Map<String, dynamic>.from(entry.value),
-            entry.key,
-          ),
-        )
-        .toList();
+    List<Participant> participants = data.entries
+      .map(
+        (entry) => ParticipantDto.fromJson(
+          Map<String, dynamic>.from(entry.value),
+          entry.key,
+        ),
+      )
+      .toList();
+
+    participants.sort((a, b) => int.parse(a.bib).compareTo(int.parse(b.bib)));
+
+    return participants;
   }
 
   @override
@@ -30,8 +34,7 @@ class FirebaseParticipantRepository extends ParticipantRepository {
     final String id = const Uuid().v4();
 
     String bib = participant.bib;
-
-    if (bib == 0) {
+    if (bib.isEmpty) {
       final snapshot = await _databaseRef.get();
       int maxBib = 0;
 
@@ -39,14 +42,14 @@ class FirebaseParticipantRepository extends ParticipantRepository {
         final data = snapshot.value as Map<dynamic, dynamic>;
         for (final value in data.values) {
           final p = Map<String, dynamic>.from(value);
-          final existingBib = p['bib'] as int? ?? 0;
+          final existingBibStr = p['bib']?.toString() ?? '0';
+          final existingBib = int.tryParse(existingBibStr) ?? 0;
           if (existingBib > maxBib) {
             maxBib = existingBib;
           }
         }
       }
-
-      bib = maxBib + 1 as String;
+      bib = (maxBib + 1).toString(); 
     }
 
     final Participant newParticipant = participant.copyWith(id: id, bib: bib);
