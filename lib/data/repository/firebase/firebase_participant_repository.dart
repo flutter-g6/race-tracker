@@ -5,7 +5,9 @@ import 'package:race_tracker/data/repository/participant_repository.dart';
 import 'package:race_tracker/data/dto/participant_dto.dart'; // Import your DTO here
 
 class FirebaseParticipantRepository extends ParticipantRepository {
-  final DatabaseReference _databaseRef = FirebaseDatabase.instance.ref().child('participants');
+  final DatabaseReference _databaseRef = FirebaseDatabase.instance.ref().child(
+    'participants',
+  );
 
   @override
   Future<List<Participant>> getParticipants() async {
@@ -14,7 +16,12 @@ class FirebaseParticipantRepository extends ParticipantRepository {
 
     final data = snapshot.value as Map<dynamic, dynamic>;
     return data.entries
-        .map((entry) => ParticipantDto.fromJson(Map<String, dynamic>.from(entry.value), entry.key))
+        .map(
+          (entry) => ParticipantDto.fromJson(
+            Map<String, dynamic>.from(entry.value),
+            entry.key,
+          ),
+        )
         .toList();
   }
 
@@ -22,7 +29,7 @@ class FirebaseParticipantRepository extends ParticipantRepository {
   Future<void> addParticipant(Participant participant) async {
     final String id = const Uuid().v4();
 
-    int bib = participant.bib;
+    String bib = participant.bib;
 
     if (bib == 0) {
       final snapshot = await _databaseRef.get();
@@ -39,7 +46,7 @@ class FirebaseParticipantRepository extends ParticipantRepository {
         }
       }
 
-      bib = maxBib + 1;
+      bib = maxBib + 1 as String;
     }
 
     final Participant newParticipant = participant.copyWith(id: id, bib: bib);
@@ -48,8 +55,12 @@ class FirebaseParticipantRepository extends ParticipantRepository {
 
   @override
   Future<void> updateParticipant(Participant participant) async {
-    if (participant.id.isEmpty) throw Exception("Participant ID is required for update");
-    await _databaseRef.child(participant.id).set(ParticipantDto.toJson(participant));
+    if (participant.id.isEmpty) {
+      throw Exception("Participant ID is required for update");
+    }
+    await _databaseRef
+        .child(participant.id)
+        .set(ParticipantDto.toJson(participant));
   }
 
   @override

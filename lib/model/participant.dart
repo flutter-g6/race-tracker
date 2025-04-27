@@ -1,6 +1,6 @@
 class Participant {
   final String id;
-  final int bib;
+  final String bib;
   final String firstName;
   final String lastName;
   final int age;
@@ -17,7 +17,7 @@ class Participant {
 
   Participant copyWith({
     String? id,
-    int? bib,
+    String? bib,
     String? firstName,
     String? lastName,
     int? age,
@@ -31,5 +31,18 @@ class Participant {
       age: age ?? this.age,
       gender: gender ?? this.gender,
     );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is Participant && other.id == id;
+  }
+
+  @override
+  int get hashCode => super.hashCode ^ id.hashCode;
+
+  @override
+  String toString() {
+    return 'Participant{id: $id, bib: $bib, firstName: $firstName, lastName: $lastName, age: $age}';
   }
 }

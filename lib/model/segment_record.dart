@@ -1,7 +1,7 @@
 enum Segment { swim, run, cycle }
 
 class SegmentRecord {
-  final int bib;
+  final String bib;
   final Segment segment; 
   final DateTime startTime;
   final DateTime? finishTime;
