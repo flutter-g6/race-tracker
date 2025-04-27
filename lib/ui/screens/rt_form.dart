@@ -75,12 +75,12 @@ class _RTFormState extends State<RTForm> {
       );
 
       if (widget.isEditMode) {
-        participantProvider.updateBook(participant);
+        participantProvider.updateParticipant(participant);
       } else {
         participantProvider.addParticipant(participant);
       }
 
-      Navigator.pop(context); // Return to the previous screen
+      Navigator.pop(context);
     }
   }
 

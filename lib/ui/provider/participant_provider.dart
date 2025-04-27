@@ -41,12 +41,12 @@ class ParticipantProvider extends ChangeNotifier {
     fetchParticipant();
   }
 
-  void deleteBook(String id) async {
+  void deleteParticipant(String id) async {
     await _repository.deleteParticipant(id);
     fetchParticipant();
   }
 
-  void updateBook(Participant participant) async {
+  void updateParticipant(Participant participant) async {
     await _repository.updateParticipant(participant);
     fetchParticipant();
   }

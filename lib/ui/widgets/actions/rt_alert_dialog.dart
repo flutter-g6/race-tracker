@@ -5,16 +5,8 @@ import '../../theme/theme.dart';
 class RTAlertDialog extends StatelessWidget {
   final String title;
   final String? content;
-  final VoidCallback onYesConfirmed;
-  final VoidCallback onNoPressed;
 
-  const RTAlertDialog({
-    super.key,
-    required this.title,
-    this.content,
-    required this.onYesConfirmed,
-    required this.onNoPressed,
-  });
+  const RTAlertDialog({super.key, required this.title, this.content});
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +20,12 @@ class RTAlertDialog extends StatelessWidget {
         style: RTTextStyles.heading.copyWith(color: RTColors.black),
       ),
       content: Text(
-        content!= null ? '' : content!,
+        content ?? '',
         style: RTTextStyles.body.copyWith(color: RTColors.black),
       ),
       actions: [
         CupertinoButton(
-          onPressed: onNoPressed,
+          onPressed: () => Navigator.pop(context, false),
           color: RTColors.error,
           padding: const EdgeInsets.symmetric(
             vertical: RTSpacings.s,
@@ -45,27 +37,7 @@ class RTAlertDialog extends StatelessWidget {
           ),
         ),
         CupertinoButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  'Action confirmed. Undo?',
-                  style: RTTextStyles.body.copyWith(color: RTColors.white),
-                ),
-                duration: const Duration(seconds: 3),
-                action: SnackBarAction(
-                  label: 'Undo',
-                  textColor: RTColors.secondary,
-                  onPressed: () {
-                    // Perform undo logic here
-                  },
-                ),
-                backgroundColor: RTColors.primary,
-              ),
-            );
-            onYesConfirmed();
-          },
+          onPressed: () => Navigator.pop(context, true),
           color: RTColors.success,
           padding: const EdgeInsets.symmetric(
             vertical: RTSpacings.s,

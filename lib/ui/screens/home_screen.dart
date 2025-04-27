@@ -5,6 +5,7 @@ import 'package:race_tracker/ui/widgets/navigation/rt_top_bar.dart';
 import 'package:race_tracker/ui/widgets/navigation/rt_nav_bar.dart';
 import 'package:race_tracker/ui/provider/participant_provider.dart';
 import '../theme/theme.dart';
+import '../widgets/actions/rt_alert_dialog.dart';
 import '../widgets/display/rt_list_tile.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -18,13 +19,14 @@ class HomeScreen extends StatelessWidget {
         title: 'Participants',
         actions: [
           IconButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const RTForm(title: 'Add Participant'),
+            onPressed:
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => const RTForm(title: 'Add Participant'),
+                  ),
                 ),
-              );
-            },
             icon: Icon(Icons.add, color: RTColors.black),
           ),
         ],
@@ -52,49 +54,90 @@ class HomeScreen extends StatelessWidget {
             itemCount: participants.length,
             itemBuilder: (context, index) {
               final participant = participants[index];
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: RTSpacings.m,
-                  vertical: RTSpacings.s,
+              return Dismissible(
+                key: Key(participant.id),
+                direction: DismissDirection.endToStart,
+                background: Container(
+                  color: RTColors.error,
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.only(right: RTSpacings.m),
+                  child: Icon(Icons.delete, color: RTColors.white),
                 ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: RTColors.primary.withAlpha(124),
-                        offset: const Offset(0, 4),
-                        blurRadius: 8,
-                      ),
-                    ],
-                  ),
-                  child: RTListTile(
-                    leading: Text(
-                      'Bib${participant.bib}',
-                      style: RTTextStyles.body.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: RTColors.primary,
-                      ),
-                    ),
-                    title: '${participant.firstName} ${participant.lastName}',
-                    trailingIcon: Icons.edit,
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: RTSpacings.s,
-                      horizontal: RTSpacings.m,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder:
-                              (context) => RTForm(
-                                title: 'Edit Participant',
-                                participant: participant,
-                                isEditMode: true,
-                              ),
+                confirmDismiss: (direction) async {
+                  final result = await showDialog<bool>(
+                    context: context,
+                    builder:
+                        (context) => RTAlertDialog(
+                          title: 'Delete Participant',
+                          content:
+                              'Delete ${participant.firstName} ${participant.lastName}?',
                         ),
-                      );
-                    },
+                  );
+                  return result ?? false;
+                },
+                onDismissed: (direction) {
+                  final deletedParticipant = participant;
+                  provider.deleteParticipant(participant.id);
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Participant deleted'),
+                      action: SnackBarAction(
+                        label: 'Undo',
+                        textColor: RTColors.secondary,
+                        onPressed: () {
+                          provider.addParticipant(deletedParticipant);
+                        },
+                      ),
+                      backgroundColor: RTColors.primary,
+                      duration: const Duration(seconds: 3),
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: RTSpacings.m,
+                    vertical: RTSpacings.s,
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: RTColors.primary.withAlpha(124),
+                          offset: const Offset(0, 4),
+                          blurRadius: 8,
+                        ),
+                      ],
+                    ),
+                    child: RTListTile(
+                      leading: Text(
+                        'Bib${participant.bib}',
+                        style: RTTextStyles.body.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: RTColors.primary,
+                        ),
+                      ),
+                      title: '${participant.firstName} ${participant.lastName}',
+                      trailingIcon: Icons.edit,
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: RTSpacings.s,
+                        horizontal: RTSpacings.m,
+                      ),
+                      onTap:
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) => RTForm(
+                                    title: 'Edit Participant',
+                                    participant: participant,
+                                    isEditMode: true,
+                                  ),
+                            ),
+                          ),
+                    ),
                   ),
                 ),
               );
