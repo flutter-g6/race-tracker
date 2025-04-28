@@ -71,6 +71,7 @@ class RTSizes {
   // Define sizes here
   static const double smallIcon = 20;
   static const double icon = 24;
+  static const double mediumIcon = 32;
 }
 
 ThemeData appTheme = ThemeData(fontFamily: 'Poppins');

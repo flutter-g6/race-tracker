@@ -4,6 +4,7 @@ import 'package:race_tracker/ui/provider/participant_provider.dart';
 
 import 'data/repository/firebase/firebase_participant_repository.dart';
 import 'ui/provider/bottom_navigation_provider.dart';
+import 'ui/provider/time_tracking_provider.dart';
 
 class ProviderScope extends StatelessWidget {
   const ProviderScope({super.key, required this.child});
@@ -19,6 +20,7 @@ class ProviderScope extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => ParticipantProvider(FirebaseParticipantRepository()),
         ),
+        ChangeNotifierProvider(create: (_) => TimeTrackingProvider()),
       ],
       child: child,
     );
