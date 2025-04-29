@@ -130,8 +130,8 @@ class _RTFormState extends State<RTForm> {
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 validator: (value) {
                   final age = int.tryParse(value ?? '');
-                  if (age == null || age <= 0 || age > 99) {
-                    return 'Enter a valid age (1-99).';
+                  if (age == null || age <= 12 || age > 59) {
+                    return 'Enter a valid age (12-59).';
                   }
                   return null;
                 },
@@ -156,6 +156,7 @@ class _RTFormState extends State<RTForm> {
                   }
                   return null;
                 },
+                key: Key('genderDropdown'),
               ),
               const SizedBox(height: RTSpacings.m),
               Row(
