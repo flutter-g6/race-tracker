@@ -1,13 +1,11 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:uuid/uuid.dart';
 import 'package:race_tracker/model/participant.dart';
 import 'package:race_tracker/data/repository/participant_repository.dart';
-import 'package:race_tracker/data/dto/participant_dto.dart'; // Import your DTO here
+import 'package:race_tracker/data/dto/participant_dto.dart';
 
 class FirebaseParticipantRepository extends ParticipantRepository {
-  final DatabaseReference _databaseRef = FirebaseDatabase.instance.ref().child(
-    'participants',
-  );
+  final DatabaseReference _databaseRef = FirebaseDatabase.instance.ref().child('participants');
+  final DatabaseReference _counterRef = FirebaseDatabase.instance.ref('bibCounter');
 
   @override
   Future<List<Participant>> getParticipants() async {
@@ -15,49 +13,29 @@ class FirebaseParticipantRepository extends ParticipantRepository {
     if (!snapshot.exists) return [];
 
     final data = snapshot.value as Map<dynamic, dynamic>;
-    List<Participant> participants = data.entries
-      .map(
-        (entry) => ParticipantDto.fromJson(
-          Map<String, dynamic>.from(entry.value),
-          entry.key,
-        ),
-      )
-      .toList();
-
-    participants.sort((a, b) {
-      final bibA = int.tryParse(a.bib) ?? 0;
-      final bibB = int.tryParse(b.bib) ?? 0;
-      return bibA.compareTo(bibB);
-    });
-
-    return participants;
+    return data.entries
+        .map((entry) => ParticipantDto.fromJson(Map<String, dynamic>.from(entry.value), entry.key))
+        .toList();
   }
 
   @override
   Future<void> addParticipant(Participant participant) async {
-    final String id = const Uuid().v4();
-
+   
     String bib = participant.bib;
     if (bib.isEmpty) {
-      final snapshot = await _databaseRef.get();
-      int maxBib = 0;
+      final result = await _counterRef.runTransaction((currentData) {
+        int current = (currentData as int?) ?? 0;
+        return Transaction.success(current + 1);
+      });
 
-      if (snapshot.exists) {
-        final data = snapshot.value as Map<dynamic, dynamic>;
-        for (final value in data.values) {
-          final p = Map<String, dynamic>.from(value);
-          final existingBibStr = p['bib']?.toString() ?? '0';
-          final existingBib = int.tryParse(existingBibStr) ?? 0;
-          if (existingBib > maxBib) {
-            maxBib = existingBib;
-          }
-        }
-      }
-      bib = (maxBib + 1).toString(); 
+      final newBib = result.snapshot.value as int;
+      bib = newBib.toString();
     }
 
-    final Participant newParticipant = participant.copyWith(id: id, bib: bib);
-    await _databaseRef.child(id).set(ParticipantDto.toJson(newParticipant));
+    final newRef = _databaseRef.push();
+    final Participant newParticipant = participant.copyWith(id: newRef.key!, bib: bib);
+
+    await newRef.set(ParticipantDto.toJson(newParticipant));
   }
 
   @override
@@ -65,9 +43,7 @@ class FirebaseParticipantRepository extends ParticipantRepository {
     if (participant.id.isEmpty) {
       throw Exception("Participant ID is required for update");
     }
-    await _databaseRef
-        .child(participant.id)
-        .set(ParticipantDto.toJson(participant));
+    await _databaseRef.child(participant.id).set(ParticipantDto.toJson(participant));
   }
 
   @override
