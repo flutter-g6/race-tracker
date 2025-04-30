@@ -5,7 +5,7 @@ import 'firebase_options.dart';
 import 'provider_scope.dart';
 import 'ui/screens/home_screen.dart';
 import 'ui/screens/result_screen.dart';
-import 'ui/screens/tracking_screen.dart';
+import 'ui/screens/race_manager.dart';
 import 'ui/theme/theme.dart';
 
 void main() async {
@@ -26,7 +26,7 @@ class RaceTrackerApp extends StatelessWidget {
       initialRoute: '/home',
       routes: {
         '/home': (context) => const HomeScreen(),
-        '/tracking': (context) => const TrackingScreen(),
+        '/race-manager': (context) => const RaceManager(),
         '/result': (context) => const ResultScreen(),
       },
     );

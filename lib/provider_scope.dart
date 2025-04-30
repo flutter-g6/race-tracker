@@ -20,7 +20,7 @@ class ProviderScope extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => ParticipantProvider(FirebaseParticipantRepository()),
         ),
-        ChangeNotifierProvider(create: (_) => TimeTrackingProvider()),
+        ChangeNotifierProvider(create: (_) => RaceManagerProvider()),
       ],
       child: child,
     );

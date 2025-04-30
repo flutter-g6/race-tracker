@@ -8,8 +8,8 @@ import '../widgets/actions/rt_button.dart';
 import '../widgets/navigation/rt_nav_bar.dart';
 import '../widgets/navigation/rt_top_bar.dart';
 
-class TrackingScreen extends StatelessWidget {
-  const TrackingScreen({super.key});
+class RaceManager extends StatelessWidget {
+  const RaceManager({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@ class TrackingScreen extends StatelessWidget {
                 ),
               ],
             ),
-            child: Consumer<TimeTrackingProvider>(
+            child: Consumer<RaceManagerProvider>(
               builder: (context, tracker, _) {
                 final elapsed = tracker.elapsed;
                 final minutes = elapsed.inMinutes.toString().padLeft(2, '0');
@@ -83,7 +83,7 @@ class TrackingScreen extends StatelessWidget {
           // Buttons
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: RTSpacings.s),
-            child: Consumer<TimeTrackingProvider>(
+            child: Consumer<RaceManagerProvider>(
               builder: (context, tracker, _) {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.center,

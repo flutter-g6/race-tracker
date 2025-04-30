@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-class TimeTrackingProvider extends ChangeNotifier {
+class RaceManagerProvider extends ChangeNotifier {
   final Stopwatch _stopwatch = Stopwatch();
   Timer? _timer;
 
@@ -26,7 +26,9 @@ class TimeTrackingProvider extends ChangeNotifier {
 
   // Reset the Time to zero.
   void reset() {
+    _stopwatch.stop();
     _stopwatch.reset();
+    _timer?.cancel();
     notifyListeners(); // Reset display
   }
 
