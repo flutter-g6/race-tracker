@@ -5,7 +5,7 @@ import '../../provider/time_tracking_provider.dart';
 import '../../theme/theme.dart';
 import '../../widgets/actions/rt_alert_dialog.dart';
 import '../../widgets/actions/rt_button.dart';
-import '../../widgets/navigation/rt_nav_bar.dart';
+import '../../widgets/navigation/rt_manager_nav_bar.dart';
 import '../../widgets/navigation/rt_top_bar.dart';
 
 class RaceManager extends StatelessWidget {

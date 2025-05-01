@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:race_tracker/ui/widgets/inputs/rt_form.dart';
 import 'package:race_tracker/ui/widgets/navigation/rt_top_bar.dart';
-import 'package:race_tracker/ui/widgets/navigation/rt_nav_bar.dart';
 import 'package:race_tracker/ui/provider/participant_provider.dart';
 import '../../theme/theme.dart';
 import '../../widgets/actions/rt_alert_dialog.dart';
 import '../../widgets/display/rt_list_tile.dart';
+import '../../widgets/navigation/rt_manager_nav_bar.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
