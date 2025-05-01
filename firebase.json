@@ -1,0 +1,22 @@
+{
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "race-tracker-118ab",
+                    "appId": "1:236544433373:android:73985249f473559b5b0f34",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "race-tracker-118ab",
+                    "configurations": {
+                        "android": "1:236544433373:android:73985249f473559b5b0f34",
+                        "web": "1:236544433373:web:3e88148691286e675b0f34"
+                    }
+                }
+            }
+        }
+    }
+}
