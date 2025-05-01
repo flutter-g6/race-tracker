@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../provider/time_tracking_provider.dart';
-import '../theme/theme.dart';
-import '../widgets/actions/rt_alert_dialog.dart';
-import '../widgets/actions/rt_button.dart';
-import '../widgets/navigation/rt_nav_bar.dart';
-import '../widgets/navigation/rt_top_bar.dart';
+import '../../provider/time_tracking_provider.dart';
+import '../../theme/theme.dart';
+import '../../widgets/actions/rt_alert_dialog.dart';
+import '../../widgets/actions/rt_button.dart';
+import '../../widgets/navigation/rt_nav_bar.dart';
+import '../../widgets/navigation/rt_top_bar.dart';
 
 class RaceManager extends StatelessWidget {
   const RaceManager({super.key});

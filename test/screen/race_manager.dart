@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:race_tracker/ui/provider/bottom_navigation_provider.dart';
 import 'package:race_tracker/ui/provider/time_tracking_provider.dart';
-import 'package:race_tracker/ui/screens/race_manager.dart';
+import 'package:race_tracker/ui/screens/manager/race_manager.dart';
 import 'package:race_tracker/ui/widgets/actions/rt_button.dart';
 
 void main() {

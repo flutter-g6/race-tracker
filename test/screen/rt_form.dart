@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:race_tracker/model/participant.dart';
 import 'package:race_tracker/ui/provider/async_value.dart';
 import 'package:race_tracker/ui/provider/participant_provider.dart';
-import 'package:race_tracker/ui/screens/rt_form.dart';
+import 'package:race_tracker/ui/widgets/inputs/rt_form.dart';
 import 'package:race_tracker/ui/widgets/actions/rt_button.dart';
 
 class MockParticipantProvider extends ChangeNotifier

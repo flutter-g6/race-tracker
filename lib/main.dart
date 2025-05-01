@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 import 'firebase_options.dart';
 import 'provider_scope.dart';
-import 'ui/screens/home_screen.dart';
-import 'ui/screens/result_screen.dart';
-import 'ui/screens/race_manager.dart';
+import 'ui/screens/manager/home_screen.dart';
+import 'ui/screens/manager/result_screen.dart';
+import 'ui/screens/manager/race_manager.dart';
 import 'ui/theme/theme.dart';
 
 void main() async {
