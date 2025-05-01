@@ -5,6 +5,12 @@ class FakeParticipantRepository extends ParticipantRepository {
   final List<Participant> _participants = [];
 
   @override
+  Future<void> restoreParticipant(Participant participant) async {
+    await Future.delayed(Duration(milliseconds: 500));
+    _participants.add(participant);
+  }
+  
+  @override
   Future<List<Participant>> getParticipants() async {
     await Future.delayed(Duration(milliseconds: 500));
     return _participants;

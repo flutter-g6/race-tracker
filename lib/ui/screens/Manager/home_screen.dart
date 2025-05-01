@@ -85,9 +85,14 @@ class HomeScreen extends StatelessWidget {
                       action: SnackBarAction(
                         label: 'Undo',
                         textColor: RTColors.secondary,
-                        onPressed: () {
-                          provider.addParticipant(deletedParticipant);
-                        },
+                          onPressed: () {
+                            provider.restoreParticipant(deletedParticipant);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Participant restored'),
+                              ),
+                            );
+                          }
                       ),
                       backgroundColor: RTColors.primary,
                       duration: const Duration(seconds: 3),

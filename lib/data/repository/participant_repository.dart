@@ -5,4 +5,5 @@ abstract class ParticipantRepository {
   Future<void> addParticipant(Participant participant);
   Future<void> updateParticipant(Participant participant);
   Future<void> deleteParticipant(String id);
+  Future<void> restoreParticipant(Participant participant); 
 }

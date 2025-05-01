@@ -50,4 +50,10 @@ class FirebaseParticipantRepository extends ParticipantRepository {
   Future<void> deleteParticipant(String id) async {
     await _databaseRef.child(id).remove();
   }
+
+  @override
+  Future<void> restoreParticipant(Participant participant) async {
+    // Just set it back at the same Firebase ID (key)
+    await _databaseRef.child(participant.id).set(ParticipantDto.toJson(participant));
+  }
 }
