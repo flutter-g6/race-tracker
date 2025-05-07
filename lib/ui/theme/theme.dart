@@ -13,7 +13,7 @@ class RTColors {
   static Color black = Colors.black;
 
   static Color error = const Color(0xFFEE3B2B);
-  static Color success =const Color(0xFF82DD55);
+  static Color success = const Color(0xFF82DD55);
   static Color warning = const Color(0xFFFAC752);
 
   static Color get backGroundColor {
@@ -29,7 +29,7 @@ class RTTextStyles {
   // Define text styles here
   static TextStyle heading = TextStyle(
     fontSize: 24,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w800,
   );
 
   static TextStyle subHeading = TextStyle(

@@ -88,6 +88,7 @@ class _RTFormState extends State<RTForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: RTTopBar(title: widget.title),
+      backgroundColor: RTColors.backGroundColor,
       body: Padding(
         padding: const EdgeInsets.all(RTSpacings.s),
         child: Form(
