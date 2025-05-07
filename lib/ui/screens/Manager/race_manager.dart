@@ -112,10 +112,10 @@ class RaceManager extends StatelessWidget {
                     // Start/Save button
                     tracker.isTracking
                         ? RTButton(
-                          text: "Save",
+                          text: "Finish",
                           onPressed: tracker.toggle,
                           type: ButtonType.primary,
-                          icon: Icons.save,
+                          icon: Icons.check,
                         )
                         : RTButton(
                           text: "Start",

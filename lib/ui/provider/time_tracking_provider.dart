@@ -1,8 +1,24 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:race_tracker/data/repository/race_repository.dart';
+import 'package:race_tracker/model/race.dart';
+import 'package:race_tracker/ui/provider/async_value.dart';
 
 class RaceManagerProvider extends ChangeNotifier {
+  final RaceRepository _repository;
+  AsyncValue<Race>? raceState;
+
+  RaceManagerProvider (this._repository);
+
+  bool get isLoading =>
+      raceState != null && raceState!.state == AsyncValueState.loading;
+
+  bool get hasData =>
+      raceState != null && raceState!.state == AsyncValueState.success;
+
+  Race? get race => raceState?.data;
+
   final Stopwatch _stopwatch = Stopwatch();
   Timer? _timer;
 
@@ -10,7 +26,18 @@ class RaceManagerProvider extends ChangeNotifier {
   Duration get elapsed => _stopwatch.elapsed;
 
   // Start the Time and schedule UI updates.
-  void start() {
+  void start() async {
+    try {
+      raceState = AsyncValue.loading();
+      notifyListeners();
+
+      final race = await _repository.createAndStartRace();
+      raceState = AsyncValue.success(race);
+    } catch (e) {
+      raceState = AsyncValue.error(e);
+    }
+    notifyListeners();
+
     _stopwatch.start();
     _timer = Timer.periodic(
       const Duration(milliseconds: 10),
@@ -19,9 +46,31 @@ class RaceManagerProvider extends ChangeNotifier {
   }
 
   // Pause and Save the Time and stop updates.
-  void pauseAndSave() {
+  void pauseAndSave() async {
     _stopwatch.stop();
     _timer?.cancel();
+
+    if (raceState?.data == null) return;
+
+    final currentRace = raceState!.data!;
+    try {
+      raceState = AsyncValue.loading();
+      notifyListeners();
+
+      await _repository.finishRace(currentRace.id);
+
+      final updated = currentRace.copyWith(
+        status: RaceStatus.finished,
+        finishTime: DateTime.now(),
+      );
+
+      raceState = AsyncValue.success(updated);
+    } catch (e) {
+      raceState = AsyncValue.error(e);
+    }
+
+    notifyListeners();
+
   }
 
   // Reset the Time to zero.

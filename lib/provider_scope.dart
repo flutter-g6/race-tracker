@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:race_tracker/data/repository/firebase/firebase_race_repository.dart';
 import 'package:race_tracker/ui/provider/participant_provider.dart';
 
 import 'data/repository/firebase/firebase_participant_repository.dart';
@@ -20,7 +21,7 @@ class ProviderScope extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => ParticipantProvider(FirebaseParticipantRepository()),
         ),
-        ChangeNotifierProvider(create: (_) => RaceManagerProvider()),
+        ChangeNotifierProvider(create: (_) => RaceManagerProvider(FirebaseRaceRepository())),
       ],
       child: child,
     );

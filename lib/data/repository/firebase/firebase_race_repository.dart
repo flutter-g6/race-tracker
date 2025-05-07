@@ -1,4 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:race_tracker/data/dto/race_dto.dart';
 import 'package:race_tracker/data/repository/race_repository.dart';
 import 'package:race_tracker/model/race.dart';
 
@@ -7,11 +8,22 @@ class FirebaseRaceRepository extends RaceRepository {
   final _raceRef = FirebaseDatabase.instance.ref().child('races');
 
   @override
-  Future<void> startRace(String raceId) async {
-    await _raceRef.child(raceId).update({
-      'status': 'ongoing',
-      'startTime': DateTime.now().toIso8601String(),
-    });
+  Future<Race> createAndStartRace() async {
+    final newRef = _raceRef.push();
+    final raceId = newRef.key!;
+
+    final now = DateTime.now();
+
+    final race = Race(
+      id: raceId,
+      status: RaceStatus.ongoing,
+      startTime: now,
+      finishTime: null,
+    );
+
+    await newRef.set(RaceDto.toJson(race));
+
+    return race;
   }
 
   @override
