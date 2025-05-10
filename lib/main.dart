@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:race_tracker/ui/screens/role_selection_screen.dart';
 import 'package:race_tracker/ui/screens/tracker/finish_time_screen.dart';
-import 'package:race_tracker/ui/screens/tracker/result_tracking_screen.dart';
+import 'package:race_tracker/ui/screens/tracker/result%20screen/result_tracking_screen.dart';
 
 import 'firebase_options.dart';
 import 'provider_scope.dart';
