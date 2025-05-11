@@ -22,7 +22,7 @@ class FirebaseResultRepository extends ResultRepository {
     final duration = finish.difference(start);
     return SegmentResult(
       bib: bib,
-      name: data['name'] ?? '',
+      name: data['fullName'] ?? '',
       duration: duration,
     );
   }
