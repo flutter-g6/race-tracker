@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../provider/time_tracking_provider.dart';
+import '../../provider/race_manager_provider.dart';
 import '../../theme/theme.dart';
 
 class RtStartButtonGrid extends StatelessWidget {

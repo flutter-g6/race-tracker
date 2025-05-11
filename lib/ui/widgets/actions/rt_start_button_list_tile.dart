@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../provider/time_tracking_provider.dart';
+import '../../provider/race_tracker_provider.dart';
 import '../../theme/theme.dart';
 
 class RtStartButtonListTile extends StatelessWidget {
@@ -11,9 +11,9 @@ class RtStartButtonListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final raceTracker = context.watch<RaceManagerProvider>();
-    final isTracking = raceTracker.isTracking;
-    final elapsed = raceTracker.elapsed;
+    final raceTracker = context.watch<RaceTrackerProvider>();
+    final isStarted = raceTracker.isStarted(bib);
+    final elapsed = raceTracker.getElapsed(bib);
 
     // Format the elapsed time into a string
     String formatTime(Duration duration) {
@@ -22,20 +22,23 @@ class RtStartButtonListTile extends StatelessWidget {
 
     // Handle the "Start" button tap
     void handleStart() {
-      if (!isTracking && elapsed == Duration.zero) {
-        raceTracker.start();
+      if (!isStarted) {
+        raceTracker.startParticipant(bib);
       }
     }
 
     // Handle reset functionality
     void handleReset() {
-      raceTracker.reset();
+      raceTracker.resetParticipant(bib);
     }
 
     return GestureDetector(
-      onTap: isTracking ? null : handleStart,
+      onTap: isStarted ? null : handleStart,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: RTSpacings.s, horizontal: RTSpacings.m),
+        padding: const EdgeInsets.symmetric(
+          vertical: RTSpacings.s,
+          horizontal: RTSpacings.m,
+        ),
         decoration: BoxDecoration(
           color:
               elapsed == Duration.zero ? RTColors.primary : RTColors.secondary,
