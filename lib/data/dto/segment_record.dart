@@ -4,6 +4,7 @@ class SegmentRecordDto {
   static Map<String, dynamic> toJson(SegmentRecord record) {
     return {
       'bib': record.bib,
+      'fullName': record.fullName,
       'segment': record.segment.name, // Save enum as string
       'startTime': record.startTime.toIso8601String(),
       if (record.finishTime != null) 'finishTime': record.finishTime!.toIso8601String(),
@@ -13,6 +14,7 @@ class SegmentRecordDto {
   static SegmentRecord fromJson(Map<String, dynamic> json) {
     return SegmentRecord(
       bib: json['bib'],
+      fullName: json['fullName'],
       segment: Segment.values.firstWhere((s) => s.name == json['segment']),
       startTime: DateTime.parse(json['startTime']),
       finishTime: json['finishTime'] != null ? DateTime.parse(json['finishTime']) : null,
