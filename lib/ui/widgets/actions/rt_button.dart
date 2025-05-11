@@ -57,6 +57,7 @@ class RTButton extends StatelessWidget {
     return SizedBox(
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
+          visualDensity: VisualDensity.compact,
           backgroundColor: backgroundColor,
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           shape: RoundedRectangleBorder(

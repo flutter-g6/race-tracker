@@ -22,7 +22,7 @@ class DisplayModeSelector extends StatelessWidget {
               : ButtonType.secondary,
           onPressed: () => provider.setDisplayMode(DisplayMode.list),
         ),
-        const SizedBox(width: RTSpacings.m),
+        const SizedBox(width: RTSpacings.s),
         RTButton(
           text: 'Grid',
           icon: Icons.grid_view,
@@ -31,7 +31,7 @@ class DisplayModeSelector extends StatelessWidget {
               : ButtonType.secondary,
           onPressed: () => provider.setDisplayMode(DisplayMode.grid),
         ),
-        const SizedBox(width: RTSpacings.m),
+        const SizedBox(width: RTSpacings.s),
         RTButton(
           text: 'Mass Start',
           icon: Icons.start,

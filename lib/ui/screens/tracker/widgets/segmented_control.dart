@@ -85,7 +85,7 @@ class _RTSegmentedControlState extends State<RTSegmentedControl> {
       ),
       side: WidgetStateProperty.all<BorderSide>(BorderSide.none),
       padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-        const EdgeInsets.symmetric(vertical: 20, horizontal: RTSpacings.m),
+        const EdgeInsets.symmetric(vertical: 5, horizontal: RTSpacings.m),
       ),
       minimumSize: WidgetStateProperty.all<Size>(const Size(80, 60)),
       iconSize: WidgetStateProperty.all<double>(RTSizes.mediumIcon),
