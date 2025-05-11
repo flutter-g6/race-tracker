@@ -56,7 +56,7 @@ class _RTSegmentedControlState extends State<RTSegmentedControl> {
     return Text(
       sport.toString().split('.').last[0].toUpperCase() +
           sport.toString().split('.').last.substring(1),
-      style: RTTextStyles.button.copyWith(fontSize: 14),
+      style: RTTextStyles.smallButton
     );
   }
 
@@ -85,7 +85,7 @@ class _RTSegmentedControlState extends State<RTSegmentedControl> {
       ),
       side: WidgetStateProperty.all<BorderSide>(BorderSide.none),
       padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-        const EdgeInsets.symmetric(vertical: 5, horizontal: RTSpacings.m),
+        const EdgeInsets.symmetric(vertical: 5, horizontal: RTSpacings.s),
       ),
       minimumSize: WidgetStateProperty.all<Size>(const Size(80, 60)),
       iconSize: WidgetStateProperty.all<double>(RTSizes.mediumIcon),

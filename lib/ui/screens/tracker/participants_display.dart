@@ -15,57 +15,63 @@ class ParticipantDisplay extends StatelessWidget {
     final provider = context.watch<ParticipantsTrackingProvider>();
 
     return switch (provider.displayMode) {
-      DisplayMode.list => ListView.separated(
-        itemCount:
-            provider.selectedRange.range[1] -
-            provider.selectedRange.range[0] +
-            1,
-        separatorBuilder: (context, index) => const RTDivider(),
-        itemBuilder: (context, index) {
-          final participantNumber = provider.selectedRange.range[0] + index;
-          return Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: RTSpacings.m,
-              vertical: RTSpacings.s,
-            ),
-            child: Row(
-              children: [
-                Text(
-                  participantNumber.toString(),
-                  style: RTTextStyles.body.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: RTColors.black,
+      DisplayMode.list => Padding(
+        padding: EdgeInsets.symmetric(vertical: RTSpacings.s),
+        child: ListView.separated(
+          itemCount:
+              provider.selectedRange.range[1] -
+              provider.selectedRange.range[0] +
+              1,
+          separatorBuilder: (context, index) => const RTDivider(),
+          itemBuilder: (context, index) {
+            final participantNumber = provider.selectedRange.range[0] + index;
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: RTSpacings.m,
+                vertical: RTSpacings.s,
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    participantNumber.toString(),
+                    style: RTTextStyles.body.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: RTColors.black,
+                    ),
                   ),
-                ),
-                const SizedBox(width: RTSpacings.m),
-                Expanded(
-                  child: Text(
-                    'Participant Name',
-                    style: RTTextStyles.body.copyWith(color: RTColors.black),
+                  const SizedBox(width: RTSpacings.m),
+                  Expanded(
+                    child: Text(
+                      'Participant Name',
+                      style: RTTextStyles.body.copyWith(color: RTColors.black),
+                    ),
                   ),
-                ),
-                RtStartButtonListTile(bib: participantNumber.toString()),
-              ],
-            ),
-          );
-        },
-      ),
-      DisplayMode.grid => GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 5,
-          crossAxisSpacing: RTSpacings.m,
-          mainAxisSpacing: RTSpacings.m,
+                  RtStartButtonListTile(bib: participantNumber.toString()),
+                ],
+              ),
+            );
+          },
         ),
-        itemCount:
-            provider.selectedRange.range[1] -
-            provider.selectedRange.range[0] +
-            1,
-        itemBuilder: (context, index) {
-          final participantNumber = provider.selectedRange.range[0] + index;
-          return Center(
-            child: RtStartButtonGrid(bib: participantNumber.toString()),
-          );
-        },
+      ),
+      DisplayMode.grid => Padding(
+        padding: const EdgeInsets.symmetric(vertical: RTSpacings.s),
+        child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 5,
+            crossAxisSpacing: RTSpacings.m,
+            mainAxisSpacing: RTSpacings.m,
+          ),
+          itemCount:
+              provider.selectedRange.range[1] -
+              provider.selectedRange.range[0] +
+              1,
+          itemBuilder: (context, index) {
+            final participantNumber = provider.selectedRange.range[0] + index;
+            return Center(
+              child: RtStartButtonGrid(bib: participantNumber.toString()),
+            );
+          },
+        ),
       ),
       DisplayMode.massStart => Center(
         child: ElevatedButton.icon(

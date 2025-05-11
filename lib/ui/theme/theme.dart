@@ -49,7 +49,7 @@ class RTTextStyles {
   );
 
   static TextStyle smallButton = TextStyle(
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: FontWeight.w400,
   );
 }
