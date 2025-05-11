@@ -6,6 +6,7 @@ abstract class SegmentTrackerRepository {
   Future<void> startAllParticipantsForSegment ( Segment segment);
   Future<void> unTrackStart( String bib, Segment segment);
   Future<void> unTrackFinish(String bib, Segment segment);
+  Future<List<SegmentRecord>> getSegmentTrackingStatus(Segment segment);
   //Stream<SegmentRecord?> watchSegment(String raceId, String bib, String segment);
 }
 

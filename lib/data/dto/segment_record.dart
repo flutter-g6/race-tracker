@@ -6,7 +6,7 @@ class SegmentRecordDto {
       'bib': record.bib,
       'fullName': record.fullName,
       'segment': record.segment.name, // Save enum as string
-      'startTime': record.startTime.toIso8601String(),
+      if (record.startTime != null) 'startTime': record.startTime!.toIso8601String(),
       if (record.finishTime != null) 'finishTime': record.finishTime!.toIso8601String(),
     };
   }
@@ -16,7 +16,7 @@ class SegmentRecordDto {
       bib: json['bib'],
       fullName: json['fullName'],
       segment: Segment.values.firstWhere((s) => s.name == json['segment']),
-      startTime: DateTime.parse(json['startTime']),
+      startTime: json['startTime'] != null ? DateTime.parse(json['startTime']) : null,
       finishTime: json['finishTime'] != null ? DateTime.parse(json['finishTime']) : null,
     );
   }
