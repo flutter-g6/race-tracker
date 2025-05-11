@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:race_tracker/ui/screens/authentication/login_screen.dart';
 import '../theme/theme.dart';
-import 'Manager/home_screen.dart';
-import 'tracker/start_time_screen.dart';
 
 class RoleSelectionScreen extends StatelessWidget {
   const RoleSelectionScreen({super.key});
@@ -39,7 +38,10 @@ class RoleSelectionScreen extends StatelessWidget {
                     iconPath: 'assets/images/manager.png',
                     onPressed: () {
                       Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (ctx) => const HomeScreen()),
+                        MaterialPageRoute(
+                          builder:
+                              (ctx) => LoginScreen(selectedRole: 'Manager'),
+                        ),
                       );
                     },
                   ),
@@ -53,7 +55,8 @@ class RoleSelectionScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (ctx) => const StartTimeScreen(),
+                          builder:
+                              (ctx) => LoginScreen(selectedRole: 'Tracker'),
                         ),
                       );
                     },
