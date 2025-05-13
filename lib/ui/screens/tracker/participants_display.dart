@@ -71,7 +71,10 @@ class ParticipantDisplay extends StatelessWidget {
                     style: RTTextStyles.body.copyWith(color: RTColors.black),
                   ),
                 ),
-                RtStartButtonListTile(participant: participant),
+                RtStartButtonListTile(
+                  participant: participant,
+                  segment: provider.selectedSport,
+                ),
               ],
             ),
           );

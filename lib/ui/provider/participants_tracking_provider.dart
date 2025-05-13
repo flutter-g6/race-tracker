@@ -8,7 +8,7 @@ import '../screens/tracker/widgets/display_mode_selector.dart';
 class ParticipantsTrackingProvider extends ChangeNotifier {
   final ParticipantRepository _repository = FirebaseParticipantRepository();
 
-  Segment _selectedSport = Segment.run;
+  Segment _selectedSport = Segment.run; // Default first segment
   DisplayMode _displayMode = DisplayMode.list;
   final Set<int> _trackingParticipants = {};
 

@@ -2,13 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:race_tracker/model/participant.dart';
 
+import '../../../model/segment_record.dart';
 import '../../provider/race_tracker_provider.dart';
 import '../../theme/theme.dart';
 
 class RtStartButtonListTile extends StatelessWidget {
   final Participant participant;
+  final Segment segment;
 
-  const RtStartButtonListTile({super.key, required this.participant});
+  const RtStartButtonListTile({
+    super.key,
+    required this.participant,
+    required this.segment,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +30,13 @@ class RtStartButtonListTile extends StatelessWidget {
     // Handle the "Start" button tap
     void handleStart() {
       if (!isStarted) {
-        raceTracker.startParticipant(participant);
+        raceTracker.startParticipant(participant, segment);
       }
     }
 
     // Handle reset functionality
     void handleReset() {
-      raceTracker.resetParticipant(participant);
+      raceTracker.resetParticipant(participant, segment);
     }
 
     return GestureDetector(
