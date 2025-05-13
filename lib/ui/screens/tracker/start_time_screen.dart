@@ -5,7 +5,6 @@ import '../../widgets/navigation/rt_top_bar.dart';
 import '../../widgets/navigation/rt_tracker_nav_bar.dart';
 import 'participants_display.dart';
 import 'widgets/display_mode_selector.dart';
-import 'widgets/participant_range_selector.dart';
 import 'widgets/sport_selector.dart';
 
 class StartTimeScreen extends StatelessWidget {
@@ -24,7 +23,6 @@ class StartTimeScreen extends StatelessWidget {
             SizedBox(height: RTSpacings.s),
             DisplayModeSelector(),
             Expanded(child: ParticipantDisplay()),
-            ParticipantRangeSelector(),
           ],
         ),
       ),

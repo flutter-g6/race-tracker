@@ -14,88 +14,111 @@ class ParticipantDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = context.watch<ParticipantsTrackingProvider>();
 
+    // Add this to trigger the data fetch
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!provider.isLoading && provider.participants.isEmpty) {
+        provider.fetchParticipants();
+      }
+    });
+
+    if (provider.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (provider.participants.isEmpty) {
+      return Center(
+        child: Text(
+          'No participants to display.',
+          style: RTTextStyles.body.copyWith(color: RTColors.black),
+        ),
+      );
+    }
+
     return switch (provider.displayMode) {
-      DisplayMode.list => Padding(
-        padding: EdgeInsets.symmetric(vertical: RTSpacings.s),
-        child: ListView.separated(
-          itemCount:
-              provider.selectedRange.range[1] -
-              provider.selectedRange.range[0] +
-              1,
-          separatorBuilder: (context, index) => const RTDivider(),
-          itemBuilder: (context, index) {
-            final participantNumber = provider.selectedRange.range[0] + index;
-            return Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: RTSpacings.m,
-                vertical: RTSpacings.s,
-              ),
-              child: Row(
-                children: [
-                  Text(
-                    participantNumber.toString(),
-                    style: RTTextStyles.body.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: RTColors.black,
-                    ),
-                  ),
-                  const SizedBox(width: RTSpacings.m),
-                  Expanded(
-                    child: Text(
-                      'Participant Name',
-                      style: RTTextStyles.body.copyWith(color: RTColors.black),
-                    ),
-                  ),
-                  RtStartButtonListTile(bib: participantNumber.toString()),
-                ],
-              ),
-            );
-          },
-        ),
-      ),
-      DisplayMode.grid => Padding(
-        padding: const EdgeInsets.symmetric(vertical: RTSpacings.s),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 5,
-            crossAxisSpacing: RTSpacings.m,
-            mainAxisSpacing: RTSpacings.m,
-          ),
-          itemCount:
-              provider.selectedRange.range[1] -
-              provider.selectedRange.range[0] +
-              1,
-          itemBuilder: (context, index) {
-            final participantNumber = provider.selectedRange.range[0] + index;
-            return Center(
-              child: RtStartButtonGrid(bib: participantNumber.toString()),
-            );
-          },
-        ),
-      ),
-      DisplayMode.massStart => Center(
-        child: ElevatedButton.icon(
-          icon: Icon(Icons.play_arrow, color: RTColors.white),
-          label: Text(
-            'Start All Participants',
-            style: RTTextStyles.button.copyWith(color: RTColors.white),
-          ),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: RTColors.primary,
-            padding: const EdgeInsets.symmetric(
-              horizontal: RTSpacings.l,
-              vertical: RTSpacings.m,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(RTSpacings.radius),
-            ),
-          ),
-          onPressed: () {
-            final range = provider.selectedRange;
-            print('Starting participants ${range.range[0]}-${range.range[1]}');
-          },
-        ),
-      ),
+      DisplayMode.list => _buildListView(provider),
+      DisplayMode.grid => _buildGridView(provider),
+      DisplayMode.massStart => _buildMassStartButton(provider),
     };
+  }
+
+  Widget _buildListView(ParticipantsTrackingProvider provider) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: RTSpacings.s),
+      child: ListView.separated(
+        itemCount: provider.participants.length,
+        separatorBuilder: (context, index) => const RTDivider(),
+        itemBuilder: (context, index) {
+          final participant = provider.participants[index];
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: RTSpacings.m,
+              vertical: RTSpacings.s,
+            ),
+            child: Row(
+              children: [
+                Text(
+                  participant.bib,
+                  style: RTTextStyles.body.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: RTColors.black,
+                  ),
+                ),
+                const SizedBox(width: RTSpacings.m),
+                Expanded(
+                  child: Text(
+                    participant.firstName,
+                    style: RTTextStyles.body.copyWith(color: RTColors.black),
+                  ),
+                ),
+                RtStartButtonListTile(bib: participant.bib),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildGridView(ParticipantsTrackingProvider provider) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: RTSpacings.s),
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 5,
+          crossAxisSpacing: RTSpacings.m,
+          mainAxisSpacing: RTSpacings.m,
+        ),
+        itemCount: provider.participants.length,
+        itemBuilder: (context, index) {
+          final participant = provider.participants[index];
+          return Center(child: RtStartButtonGrid(bib: participant.bib));
+        },
+      ),
+    );
+  }
+
+  Widget _buildMassStartButton(ParticipantsTrackingProvider provider) {
+    return Center(
+      child: ElevatedButton.icon(
+        icon: Icon(Icons.play_arrow, color: RTColors.white),
+        label: Text(
+          'Start All Participants',
+          style: RTTextStyles.button.copyWith(color: RTColors.white),
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: RTColors.primary,
+          padding: const EdgeInsets.symmetric(
+            horizontal: RTSpacings.l,
+            vertical: RTSpacings.m,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(RTSpacings.radius),
+          ),
+        ),
+        onPressed: () {
+          //
+        },
+      ),
+    );
   }
 }
