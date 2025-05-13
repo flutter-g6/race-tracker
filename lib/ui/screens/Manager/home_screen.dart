@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:race_tracker/ui/screens/rt_form.dart';
+import 'package:race_tracker/ui/widgets/inputs/rt_form.dart';
 import 'package:race_tracker/ui/widgets/navigation/rt_top_bar.dart';
-import 'package:race_tracker/ui/widgets/navigation/rt_nav_bar.dart';
 import 'package:race_tracker/ui/provider/participant_provider.dart';
-import '../theme/theme.dart';
-import '../widgets/actions/rt_alert_dialog.dart';
-import '../widgets/display/rt_list_tile.dart';
+import '../../theme/theme.dart';
+import '../../widgets/actions/rt_alert_dialog.dart';
+import '../../widgets/display/rt_list_tile.dart';
+import '../../widgets/navigation/rt_manager_nav_bar.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -85,9 +85,14 @@ class HomeScreen extends StatelessWidget {
                       action: SnackBarAction(
                         label: 'Undo',
                         textColor: RTColors.secondary,
-                        onPressed: () {
-                          provider.addParticipant(deletedParticipant);
-                        },
+                          onPressed: () {
+                            provider.restoreParticipant(deletedParticipant);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Participant restored'),
+                              ),
+                            );
+                          }
                       ),
                       backgroundColor: RTColors.primary,
                       duration: const Duration(seconds: 3),

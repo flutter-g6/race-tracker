@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../provider/time_tracking_provider.dart';
-import '../theme/theme.dart';
-import '../widgets/actions/rt_alert_dialog.dart';
-import '../widgets/actions/rt_button.dart';
-import '../widgets/navigation/rt_nav_bar.dart';
-import '../widgets/navigation/rt_top_bar.dart';
+import '../../provider/race_manager_provider.dart';
+import '../../theme/theme.dart';
+import '../../widgets/actions/rt_alert_dialog.dart';
+import '../../widgets/actions/rt_button.dart';
+import '../../widgets/navigation/rt_manager_nav_bar.dart';
+import '../../widgets/navigation/rt_top_bar.dart';
 
 class RaceManager extends StatelessWidget {
   const RaceManager({super.key});
@@ -112,10 +112,10 @@ class RaceManager extends StatelessWidget {
                     // Start/Save button
                     tracker.isTracking
                         ? RTButton(
-                          text: "Save",
+                          text: "Finish",
                           onPressed: tracker.toggle,
                           type: ButtonType.primary,
-                          icon: Icons.save,
+                          icon: Icons.check,
                         )
                         : RTButton(
                           text: "Start",

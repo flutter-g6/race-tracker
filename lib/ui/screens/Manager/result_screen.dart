@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/navigation/rt_nav_bar.dart';
-import '../widgets/navigation/rt_top_bar.dart';
+import '../../widgets/navigation/rt_manager_nav_bar.dart';
+import '../../widgets/navigation/rt_top_bar.dart';
 
 class ResultScreen extends StatelessWidget {
   const ResultScreen({super.key});

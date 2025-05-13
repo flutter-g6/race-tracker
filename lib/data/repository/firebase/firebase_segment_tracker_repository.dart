@@ -17,14 +17,24 @@ class FirebaseSegmentTrackerRepository extends SegmentTrackerRepository {
     return status == RaceStatus.ongoing;
   }
 
+  Future<String> getActiveRaceId() async {
+    final raceId = await _raceRepository.getCurrentRaceId();
+    if (raceId == null) throw Exception("No active race found");
+    return raceId;
+  }
+  
   @override
-  Future<void> startSegment(String raceId, String bib, Segment segment) async {
+  Future<void> startSegment(String fullName, String bib, Segment segment) async {
+
+    final raceId = await getActiveRaceId();
+
     if (!await _isRaceOngoing(raceId)) {
       throw Exception("Race is not ongoing");
     }
 
     final record = SegmentRecord(
       bib: bib,
+      fullName: fullName,
       segment: segment,
       startTime: DateTime.now(),
     );
@@ -34,14 +44,16 @@ class FirebaseSegmentTrackerRepository extends SegmentTrackerRepository {
   }
 
   @override
-  Future<void> finishSegment(String raceId, String bib, Segment segment) async {
+  Future<void> finishSegment(String bib, Segment segment) async {
+    final raceId = await getActiveRaceId();
     final finishTime = DateTime.now().toIso8601String();
     final finishRef = _db.child('race_segments/$raceId/${segment.name}/$bib/finishTime');
     await finishRef.set(finishTime);
   }
 
   @override
-  Future<void> startAllParticipantsForSegment(String raceId, Segment segment) async {
+  Future<void> startAllParticipantsForSegment( Segment segment) async {
+    final raceId = await getActiveRaceId();
     if (!await _isRaceOngoing(raceId)) {
       throw Exception("Race is not ongoing");
     }
@@ -53,6 +65,7 @@ class FirebaseSegmentTrackerRepository extends SegmentTrackerRepository {
     for (final participant in participants) {
       final record = SegmentRecord(
         bib: participant.bib,
+        fullName: '${participant.firstName} ${participant.lastName}',
         segment: segment,
         startTime: DateTime.now(),
       );
@@ -62,15 +75,58 @@ class FirebaseSegmentTrackerRepository extends SegmentTrackerRepository {
   }
 
   @override
-  Future<void> unTrackStart(String raceId, String bib, Segment segment) async {
+  Future<void> unTrackStart( String bib, Segment segment) async {
+    final raceId = await getActiveRaceId();
     final segmentStartRef = _db.child('race_segments/$raceId/$segment/$bib/startTime');
     await segmentStartRef.remove();
   }
 
   @override
-  Future<void> unTrackFinish(String raceId, String bib, Segment segment) async {
+  Future<void> unTrackFinish(String bib, Segment segment) async {
+    final raceId = await getActiveRaceId();
     final segmentFinishRef = _db.child('race_segments/$raceId/$segment/$bib/finishTime');
     await segmentFinishRef.remove();
+  }
+
+   @override
+  Future<List<SegmentRecord>> getSegmentTrackingStatus(Segment segment) async {
+    final raceId = await getActiveRaceId();
+    final participants = await _participantRepository.getParticipants();
+    final segmentRef = _db.child('race_segments/$raceId/${segment.name}');
+
+    final snapshot = await segmentRef.get();
+
+    if (!snapshot.exists) return [];
+
+    final List<SegmentRecord> records = [];
+
+    for (final p in participants) {
+      final bibStr = p.bib.toString();
+      final segmentData = snapshot.child(bibStr);
+
+      if (!segmentData.exists) {
+        // Participant has not started this segment
+        records.add(SegmentRecord(
+          fullName: '${p.firstName} ${p.lastName}',
+          bib: bibStr,
+          segment: segment,
+        ));
+        continue;
+      }
+
+      final startTime = segmentData.child('startTime').value as String?;
+      final finishTime = segmentData.child('finishTime').value as String?;
+
+      records.add(SegmentRecord(
+        bib: bibStr,
+        fullName: '${p.firstName} ${p.lastName}',
+        segment: segment,
+        startTime: startTime != null ? DateTime.parse(startTime) : null,
+        finishTime: finishTime != null ? DateTime.parse(finishTime) : null,
+      ));
+    }
+
+    return records;
   }
 
 }

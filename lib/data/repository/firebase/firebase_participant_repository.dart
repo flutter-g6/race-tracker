@@ -4,8 +4,12 @@ import 'package:race_tracker/data/repository/participant_repository.dart';
 import 'package:race_tracker/data/dto/participant_dto.dart';
 
 class FirebaseParticipantRepository extends ParticipantRepository {
-  final DatabaseReference _databaseRef = FirebaseDatabase.instance.ref().child('participants');
-  final DatabaseReference _counterRef = FirebaseDatabase.instance.ref('bibCounter');
+  final DatabaseReference _databaseRef = FirebaseDatabase.instance.ref().child(
+    'participants',
+  );
+  final DatabaseReference _counterRef = FirebaseDatabase.instance.ref(
+    'bibCounter',
+  );
 
   @override
   Future<List<Participant>> getParticipants() async {
@@ -14,13 +18,17 @@ class FirebaseParticipantRepository extends ParticipantRepository {
 
     final data = snapshot.value as Map<dynamic, dynamic>;
     return data.entries
-        .map((entry) => ParticipantDto.fromJson(Map<String, dynamic>.from(entry.value), entry.key))
+        .map(
+          (entry) => ParticipantDto.fromJson(
+            Map<String, dynamic>.from(entry.value),
+            entry.key,
+          ),
+        )
         .toList();
   }
 
   @override
   Future<void> addParticipant(Participant participant) async {
-   
     String bib = participant.bib;
     if (bib.isEmpty) {
       final result = await _counterRef.runTransaction((currentData) {
@@ -33,7 +41,10 @@ class FirebaseParticipantRepository extends ParticipantRepository {
     }
 
     final newRef = _databaseRef.push();
-    final Participant newParticipant = participant.copyWith(id: newRef.key!, bib: bib);
+    final Participant newParticipant = participant.copyWith(
+      id: newRef.key!,
+      bib: bib,
+    );
 
     await newRef.set(ParticipantDto.toJson(newParticipant));
   }
@@ -43,11 +54,21 @@ class FirebaseParticipantRepository extends ParticipantRepository {
     if (participant.id.isEmpty) {
       throw Exception("Participant ID is required for update");
     }
-    await _databaseRef.child(participant.id).set(ParticipantDto.toJson(participant));
+    await _databaseRef
+        .child(participant.id)
+        .set(ParticipantDto.toJson(participant));
   }
 
   @override
   Future<void> deleteParticipant(String id) async {
     await _databaseRef.child(id).remove();
+  }
+
+  @override
+  Future<void> restoreParticipant(Participant participant) async {
+    // Just set it back at the same Firebase ID (key)
+    await _databaseRef
+        .child(participant.id)
+        .set(ParticipantDto.toJson(participant));
   }
 }

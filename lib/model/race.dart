@@ -13,4 +13,17 @@ class Race {
     this.finishTime,
   });
 
+  Race copyWith({
+    RaceStatus? status,
+    DateTime? startTime,
+    DateTime? finishTime,
+  }) {
+    return Race(
+      id: id,
+      status: status ?? this.status,
+      startTime: startTime ?? this.startTime,
+      finishTime: finishTime ?? this.finishTime,
+    );
+  }
+
 }

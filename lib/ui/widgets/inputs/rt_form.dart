@@ -6,8 +6,8 @@ import 'package:race_tracker/ui/theme/theme.dart';
 import 'package:race_tracker/ui/widgets/actions/rt_button.dart';
 import 'package:race_tracker/ui/widgets/actions/rt_text_button.dart';
 
-import '../provider/participant_provider.dart';
-import '../widgets/navigation/rt_top_bar.dart';
+import '../../provider/participant_provider.dart';
+import '../navigation/rt_top_bar.dart';
 
 class RTForm extends StatefulWidget {
   const RTForm({
@@ -88,6 +88,7 @@ class _RTFormState extends State<RTForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: RTTopBar(title: widget.title),
+      backgroundColor: RTColors.backGroundColor,
       body: Padding(
         padding: const EdgeInsets.all(RTSpacings.s),
         child: Form(
