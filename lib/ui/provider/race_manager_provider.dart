@@ -25,6 +25,10 @@ class RaceManagerProvider extends ChangeNotifier {
   bool get isTracking => _stopwatch.isRunning;
   Duration get elapsed => _stopwatch.elapsed;
 
+  // Fetch current race ID from the repository
+  Future<String?> getCurrentRaceId() async {
+    return await _repository.getCurrentRaceId();
+  }
   // Start the Time and schedule UI updates.
   void start() async {
     try {
@@ -70,7 +74,6 @@ class RaceManagerProvider extends ChangeNotifier {
     }
 
     notifyListeners();
-
   }
 
   // Reset the Time to zero.

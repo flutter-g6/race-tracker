@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:race_tracker/model/participant.dart';
-
 import '../../../model/segment_record.dart';
 import '../../provider/race_tracker_provider.dart';
+import '../../provider/race_manager_provider.dart';
 import '../../theme/theme.dart';
 
 class RtStartButtonListTile extends StatelessWidget {
@@ -21,6 +21,7 @@ class RtStartButtonListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final raceTracker = context.watch<RaceTrackerProvider>();
+    final raceManager = context.watch<RaceManagerProvider>();
     final isStarted = raceTracker.isStarted(participant);
     final elapsed = raceTracker.getElapsed(participant);
     final isFinished = raceTracker.isFinished(participant, segment);
@@ -31,9 +32,40 @@ class RtStartButtonListTile extends StatelessWidget {
     }
 
     // Handle the "Start" button tap
-    void handleStart() {
-      if (!isStarted) {
-        raceTracker.startParticipant(participant, segment);
+    void handleStart() async {
+      try {
+        // Get the current race ID from Firebase
+        final currentRaceId = await raceManager.getCurrentRaceId();
+
+        // If no race ID exists, show an error message
+        if (currentRaceId == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('No active race. Manager must start a race first.'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+          return;
+        }
+
+        // Proceed with starting the participant tracking
+        if (!isStarted) {
+          raceTracker.startParticipant(participant, segment);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Participant tracking started!'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
+      } catch (e) {
+        // Handle any errors during the check
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error checking race status: $e'),
+            duration: const Duration(seconds: 2),
+          ),
+        );
       }
     }
 
