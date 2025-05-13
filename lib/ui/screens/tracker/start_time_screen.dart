@@ -15,14 +15,14 @@ class StartTimeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: RTColors.bgColor,
       appBar: RTTopBar(title: 'Start Timer', centerTitle: true),
-      body: const Padding(
-        padding: EdgeInsets.all(RTSpacings.s),
+      body: Padding(
+        padding: const EdgeInsets.all(RTSpacings.s),
         child: Column(
           children: [
-            SportSelector(),
-            SizedBox(height: RTSpacings.s),
-            DisplayModeSelector(),
-            Expanded(child: ParticipantDisplay()),
+            const SportSelector(),
+            const SizedBox(height: RTSpacings.s),
+            const DisplayModeSelector(),
+            const Expanded(child: ParticipantDisplay()),
           ],
         ),
       ),

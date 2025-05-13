@@ -7,9 +7,23 @@ import '../../widgets/actions/rt_start_button_grid.dart';
 import '../../theme/theme.dart';
 import '../../widgets/display/rt_divider.dart';
 import 'widgets/display_mode_selector.dart';
+import 'widgets/participant_range_selector.dart';
 
-class ParticipantDisplay extends StatelessWidget {
+class ParticipantDisplay extends StatefulWidget {
   const ParticipantDisplay({super.key});
+
+  @override
+  State<ParticipantDisplay> createState() => _ParticipantDisplayState();
+}
+
+class _ParticipantDisplayState extends State<ParticipantDisplay> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +40,16 @@ class ParticipantDisplay extends StatelessWidget {
       return const Center(child: CircularProgressIndicator());
     }
 
+    return Column(
+      children: [
+        Expanded(child: _buildContent(provider)),
+        const SizedBox(height: 16),
+        ParticipantRangeSelector(scrollController: _scrollController),
+      ],
+    );
+  }
+
+  Widget _buildContent(ParticipantsTrackingProvider provider) {
     if (provider.participants.isEmpty) {
       return Center(
         child: Text(
@@ -46,6 +70,7 @@ class ParticipantDisplay extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: RTSpacings.s),
       child: ListView.separated(
+        controller: _scrollController,
         itemCount: provider.participants.length,
         separatorBuilder: (context, index) => const RTDivider(),
         itemBuilder: (context, index) {
@@ -87,6 +112,7 @@ class ParticipantDisplay extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: RTSpacings.s),
       child: GridView.builder(
+        controller: _scrollController,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 5,
           crossAxisSpacing: RTSpacings.m,
