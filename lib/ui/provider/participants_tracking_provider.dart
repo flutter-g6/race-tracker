@@ -2,22 +2,20 @@ import 'package:flutter/foundation.dart';
 import 'package:race_tracker/data/repository/firebase/firebase_participant_repository.dart';
 import '../../data/repository/participant_repository.dart';
 import '../../model/participant.dart';
-
-enum SportType { running, swimming, cycling }
-
-enum DisplayMode { list, grid, massStart }
+import '../../model/segment_record.dart';
+import '../screens/tracker/widgets/display_mode_selector.dart';
 
 class ParticipantsTrackingProvider extends ChangeNotifier {
   final ParticipantRepository _repository = FirebaseParticipantRepository();
 
-  SportType _selectedSport = SportType.running;
+  Segment _selectedSport = Segment.run;
   DisplayMode _displayMode = DisplayMode.list;
   final Set<int> _trackingParticipants = {};
 
   List<Participant> _participants = [];
   bool _isLoading = false;
 
-  SportType get selectedSport => _selectedSport;
+  Segment get selectedSport => _selectedSport;
   DisplayMode get displayMode => _displayMode;
   Set<int> get trackingParticipants => _trackingParticipants;
   List<Participant> get participants => _participants;
@@ -36,7 +34,7 @@ class ParticipantsTrackingProvider extends ChangeNotifier {
     }
   }
 
-  void setSelectedSport(SportType sport) {
+  void setSelectedSport(Segment sport) {
     _selectedSport = sport;
     notifyListeners();
   }

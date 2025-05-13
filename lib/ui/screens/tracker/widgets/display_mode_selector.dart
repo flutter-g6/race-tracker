@@ -5,6 +5,8 @@ import 'package:race_tracker/ui/provider/participants_tracking_provider.dart';
 import '../../../theme/theme.dart';
 import '../../../widgets/actions/rt_button.dart';
 
+enum DisplayMode { list, grid, massStart }
+
 class DisplayModeSelector extends StatelessWidget {
   const DisplayModeSelector({super.key});
 
