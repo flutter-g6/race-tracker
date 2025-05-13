@@ -41,7 +41,7 @@ class RaceTrackerProvider extends ChangeNotifier {
     if (_participantStartTimes.containsKey(participant)) {
       _finishedSegments.putIfAbsent(participant, () => {}).add(segment);
       _segmentTrackerRepository?.finishSegment(
-        "${participant.firstName} ${participant.firstName}",
+        participant.bib,
         segment,
       );
       notifyListeners();
