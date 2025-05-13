@@ -10,7 +10,9 @@ import 'widgets/display_mode_selector.dart';
 import 'widgets/participant_range_selector.dart';
 
 class ParticipantDisplay extends StatefulWidget {
-  const ParticipantDisplay({super.key});
+  const ParticipantDisplay({super.key, required this.isStartScreen});
+
+  final bool isStartScreen;
 
   @override
   State<ParticipantDisplay> createState() => _ParticipantDisplayState();
@@ -99,6 +101,7 @@ class _ParticipantDisplayState extends State<ParticipantDisplay> {
                 RtStartButtonListTile(
                   participant: participant,
                   segment: provider.selectedSport,
+                  isStartButton: widget.isStartScreen,
                 ),
               ],
             ),

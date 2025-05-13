@@ -22,7 +22,7 @@ class StartTimeScreen extends StatelessWidget {
             const SportSelector(),
             const SizedBox(height: RTSpacings.s),
             const DisplayModeSelector(),
-            const Expanded(child: ParticipantDisplay()),
+            const Expanded(child: ParticipantDisplay(isStartScreen: true)),
           ],
         ),
       ),

@@ -9,11 +9,13 @@ import '../../theme/theme.dart';
 class RtStartButtonListTile extends StatelessWidget {
   final Participant participant;
   final Segment segment;
+  final bool isStartButton;
 
   const RtStartButtonListTile({
     super.key,
     required this.participant,
     required this.segment,
+    required this.isStartButton,
   });
 
   @override
@@ -40,36 +42,37 @@ class RtStartButtonListTile extends StatelessWidget {
     }
 
     return GestureDetector(
-      onTap: isStarted ? null : handleStart,
+      onTap: isStartButton ? (isStarted ? null : handleStart) : handleReset,
       child: Container(
         padding: const EdgeInsets.symmetric(
           vertical: RTSpacings.s,
           horizontal: RTSpacings.m,
         ),
         decoration: BoxDecoration(
-          color:
-              elapsed == Duration.zero ? RTColors.primary : RTColors.secondary,
+          color: _getButtonColor(elapsed),
           borderRadius: BorderRadius.circular(RTSpacings.radius),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (elapsed != Duration.zero) ...[
-              Text(
-                formatTime(elapsed),
-                style: RTTextStyles.body.copyWith(color: RTColors.black),
-              ),
-              const SizedBox(width: 8),
-              Icon(Icons.check, color: RTColors.success),
-              const SizedBox(width: 8),
-              GestureDetector(
-                onTap: handleReset,
-                child: Icon(Icons.refresh, color: RTColors.primary),
-              ),
+            if (isStartButton) ...[
+              if (elapsed != Duration.zero) ...[
+                Text(
+                  formatTime(elapsed),
+                  style: RTTextStyles.body.copyWith(color: RTColors.black),
+                ),
+                const SizedBox(width: 8),
+                Icon(Icons.check, color: RTColors.success),
+              ] else ...[
+                Text(
+                  "Start",
+                  style: RTTextStyles.body.copyWith(color: RTColors.white),
+                ),
+              ],
             ] else ...[
               Text(
-                "Start",
+                "Finish",
                 style: RTTextStyles.body.copyWith(color: RTColors.white),
               ),
             ],
@@ -77,5 +80,13 @@ class RtStartButtonListTile extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Color _getButtonColor(Duration elapsed) {
+    if (isStartButton) {
+      return elapsed == Duration.zero ? RTColors.primary : RTColors.secondary;
+    } else {
+      return elapsed == Duration.zero ? RTColors.disabled : RTColors.primary;
+    }
   }
 }
