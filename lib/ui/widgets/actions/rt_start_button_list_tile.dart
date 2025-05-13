@@ -23,6 +23,7 @@ class RtStartButtonListTile extends StatelessWidget {
     final raceTracker = context.watch<RaceTrackerProvider>();
     final isStarted = raceTracker.isStarted(participant);
     final elapsed = raceTracker.getElapsed(participant);
+    final isFinished = raceTracker.isFinished(participant, segment);
 
     // Format the elapsed time into a string
     String formatTime(Duration duration) {
@@ -36,20 +37,54 @@ class RtStartButtonListTile extends StatelessWidget {
       }
     }
 
+    // Handle the "Finish" button tap
+    void handleFinish() {
+      if (isStarted && !isFinished) {
+        raceTracker.finishParticipant(participant, segment);
+      }
+    }
+
     // Handle reset functionality
     void handleReset() {
       raceTracker.resetParticipant(participant, segment);
     }
 
+    Color getButtonColor(Duration elapsed) {
+      if (isStartButton) {
+        return elapsed == Duration.zero ? RTColors.primary : RTColors.secondary;
+      } else {
+        if (isFinished) return RTColors.secondary;
+        return elapsed == Duration.zero ? RTColors.disabled : RTColors.primary;
+      }
+    }
+
+    VoidCallback? getOnTap(bool isStarted, bool isFinished) {
+      if (isStartButton) {
+        // Start screen: only allow tap if not already started
+        return isStarted ? null : handleStart;
+      } else {
+        // Finish screen:
+        // If never started and not finished — disable
+        if (!isStarted && !isFinished) return null;
+
+        // If started and not finished — allow finish
+        if (isStarted && !isFinished) return handleFinish;
+
+        // If finished, allow reset
+        if (isFinished) return handleReset;
+      }
+      return null;
+    }
+
     return GestureDetector(
-      onTap: isStartButton ? (isStarted ? null : handleStart) : handleReset,
+      onTap: getOnTap(isStarted, isFinished),
       child: Container(
         padding: const EdgeInsets.symmetric(
           vertical: RTSpacings.s,
           horizontal: RTSpacings.m,
         ),
         decoration: BoxDecoration(
-          color: _getButtonColor(elapsed),
+          color: getButtonColor(elapsed),
           borderRadius: BorderRadius.circular(RTSpacings.radius),
         ),
         child: Row(
@@ -72,21 +107,18 @@ class RtStartButtonListTile extends StatelessWidget {
               ],
             ] else ...[
               Text(
-                "Finish",
-                style: RTTextStyles.body.copyWith(color: RTColors.white),
+                isFinished ? "Reset" : "Finish",
+                style: RTTextStyles.body.copyWith(
+                  color:
+                      (elapsed == Duration.zero && !isFinished)
+                          ? RTColors.disabled
+                          : RTColors.white,
+                ),
               ),
             ],
           ],
         ),
       ),
     );
-  }
-
-  Color _getButtonColor(Duration elapsed) {
-    if (isStartButton) {
-      return elapsed == Duration.zero ? RTColors.primary : RTColors.secondary;
-    } else {
-      return elapsed == Duration.zero ? RTColors.disabled : RTColors.primary;
-    }
   }
 }

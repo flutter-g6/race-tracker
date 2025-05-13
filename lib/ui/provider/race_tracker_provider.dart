@@ -7,6 +7,8 @@ import 'package:race_tracker/model/segment_record.dart';
 
 class RaceTrackerProvider extends ChangeNotifier {
   final Map<Participant, DateTime> _participantStartTimes = {};
+  final Map<Participant, Set<Segment>> _finishedSegments = {};
+
   Timer? _timer;
   final FirebaseSegmentTrackerRepository? _segmentTrackerRepository;
 
@@ -35,6 +37,17 @@ class RaceTrackerProvider extends ChangeNotifier {
     }
   }
 
+  void finishParticipant(Participant participant, Segment segment) {
+    if (_participantStartTimes.containsKey(participant)) {
+      _finishedSegments.putIfAbsent(participant, () => {}).add(segment);
+      _segmentTrackerRepository?.finishSegment(
+        "${participant.firstName} ${participant.firstName}",
+        segment,
+      );
+      notifyListeners();
+    }
+  }
+
   Duration getElapsed(Participant participant) {
     final start = _participantStartTimes[participant];
     if (start == null) return Duration.zero;
@@ -45,7 +58,11 @@ class RaceTrackerProvider extends ChangeNotifier {
       _participantStartTimes.containsKey(participant);
 
   void resetParticipant(Participant participant, Segment segment) {
-    _participantStartTimes.remove(participant);
+    _finishedSegments.remove(participant);
     notifyListeners();
+  }
+
+  bool isFinished(Participant participant, Segment segment) {
+    return _finishedSegments[participant]?.contains(segment) ?? false;
   }
 }
