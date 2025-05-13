@@ -71,7 +71,7 @@ class ParticipantDisplay extends StatelessWidget {
                     style: RTTextStyles.body.copyWith(color: RTColors.black),
                   ),
                 ),
-                RtStartButtonListTile(bib: participant.bib),
+                RtStartButtonListTile(participant: participant),
               ],
             ),
           );

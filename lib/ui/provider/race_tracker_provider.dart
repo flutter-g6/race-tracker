@@ -1,13 +1,18 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:race_tracker/data/repository/firebase/firebase_segment_tracker_repository.dart';
+import 'package:race_tracker/model/participant.dart';
 
 class RaceTrackerProvider extends ChangeNotifier {
-  final Map<String, DateTime> _participantStartTimes = {};
+  final Map<Participant, DateTime> _participantStartTimes = {};
   Timer? _timer;
+  FirebaseSegmentTrackerRepository? _segmentTrackerRepository;
+
+  RaceTrackerProvider(this._segmentTrackerRepository);
 
   ///
-  /// Managing timer
+  /// Managing timer visually
   ///
   void _startNotifierLoop() {
     _timer?.cancel();
@@ -16,24 +21,24 @@ class RaceTrackerProvider extends ChangeNotifier {
     });
   }
 
-  void startParticipant(String bib) {
-    if (!_participantStartTimes.containsKey(bib)) {
-      _participantStartTimes[bib] = DateTime.now();
+  void startParticipant(Participant participant) {
+    if (!_participantStartTimes.containsKey(participant)) {
+      _participantStartTimes[participant] = DateTime.now();
       _startNotifierLoop();
       notifyListeners();
     }
   }
 
-  Duration getElapsed(String bib) {
-    final start = _participantStartTimes[bib];
+  Duration getElapsed(Participant participant) {
+    final start = _participantStartTimes[participant];
     if (start == null) return Duration.zero;
     return DateTime.now().difference(start);
   }
 
-  bool isStarted(String bib) => _participantStartTimes.containsKey(bib);
+  bool isStarted(Participant participant) => _participantStartTimes.containsKey(participant);
 
-  void resetParticipant(String bib) {
-    _participantStartTimes.remove(bib);
+  void resetParticipant(Participant participant) {
+    _participantStartTimes.remove(participant);
     notifyListeners();
   }
 }

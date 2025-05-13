@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:race_tracker/model/participant.dart';
 
 import '../../provider/race_tracker_provider.dart';
 import '../../theme/theme.dart';
 
 class RtStartButtonListTile extends StatelessWidget {
-  final String bib;
+  final Participant participant;
 
-  const RtStartButtonListTile({super.key, required this.bib});
+  const RtStartButtonListTile({super.key, required this.participant});
 
   @override
   Widget build(BuildContext context) {
     final raceTracker = context.watch<RaceTrackerProvider>();
-    final isStarted = raceTracker.isStarted(bib);
-    final elapsed = raceTracker.getElapsed(bib);
+    final isStarted = raceTracker.isStarted(participant);
+    final elapsed = raceTracker.getElapsed(participant);
 
     // Format the elapsed time into a string
     String formatTime(Duration duration) {
@@ -23,13 +24,13 @@ class RtStartButtonListTile extends StatelessWidget {
     // Handle the "Start" button tap
     void handleStart() {
       if (!isStarted) {
-        raceTracker.startParticipant(bib);
+        raceTracker.startParticipant(participant);
       }
     }
 
     // Handle reset functionality
     void handleReset() {
-      raceTracker.resetParticipant(bib);
+      raceTracker.resetParticipant(participant);
     }
 
     return GestureDetector(
