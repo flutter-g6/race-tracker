@@ -9,11 +9,29 @@ class FirebaseResultRepository extends ResultRepository {
   final FirebaseSegmentTrackerRepository _segmentTrackerRepository = FirebaseSegmentTrackerRepository();
 
   Future<Map<String, dynamic>> _getSegmentData(String segmentName) async {
-    
     final raceId = await _segmentTrackerRepository.getActiveRaceId();
     final snapshot = await _db.child('race_segments/$raceId/$segmentName').get();
+    
     if (!snapshot.exists) return {};
-    return Map<String, dynamic>.from(snapshot.value as Map);
+
+    final value = snapshot.value;
+
+    if (value is Map) {
+      return Map<String, dynamic>.from(value);
+    } else if (value is List) {
+      // Convert List to Map by using index or some ID if available
+      final result = <String, dynamic>{};
+      for (int i = 0; i < value.length; i++) {
+        final item = value[i];
+        if (item != null) {
+          result[i.toString()] = item; // Or use item['bib'] if available
+        }
+      }
+      return result;
+    } else {
+      print('⚠️ Unexpected data format: ${value.runtimeType}');
+      return {};
+    }
   }
 
   SegmentResult _parseSegmentResult(String bib, Map<String, dynamic> data) {
