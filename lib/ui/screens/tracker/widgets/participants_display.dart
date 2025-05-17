@@ -43,7 +43,7 @@ class _ParticipantDisplayState extends State<ParticipantDisplay> {
     return Column(
       children: [
         Expanded(child: _buildContent(provider)),
-        const SizedBox(height: 16),
+        const SizedBox(height: RTSpacings.m),
         ParticipantRangeSelector(scrollController: _scrollController),
       ],
     );
