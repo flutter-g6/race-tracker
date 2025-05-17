@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../model/segment_record.dart';
 import '../../theme/theme.dart';
 import '../../widgets/navigation/rt_top_bar.dart';
 import '../../widgets/navigation/rt_tracker_nav_bar.dart';
@@ -20,7 +21,7 @@ class TrackRunningScreen extends StatelessWidget {
           children: [
             SizedBox(height: RTSpacings.s),
             DisplayModeSelector(),
-            Expanded(child: ParticipantDisplay()),
+            Expanded(child: ParticipantDisplay(segment: Segment.run)),
           ],
         ),
       ),

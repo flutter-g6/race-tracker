@@ -30,10 +30,23 @@ class ProviderScope extends StatelessWidget {
           create: (_) => RaceManagerProvider(FirebaseRaceRepository()),
         ),
         ChangeNotifierProvider(create: (_) => ParticipantsTrackingProvider()),
-        ChangeNotifierProvider(create: (_) => RaceTrackerProvider(FirebaseSegmentTrackerRepository())),
         ChangeNotifierProvider(
-        create: (_) => ResultProvider(FirebaseResultRepository()),
-      ),
+          create: (_) {
+            final raceTrackerProvider = RaceTrackerProvider(
+              FirebaseSegmentTrackerRepository(),
+              FirebaseRaceRepository(),
+            );
+
+            // This function is called here becauase I want it to execute only once
+            // Basically, this will establish a stream subscription to the race status
+            raceTrackerProvider.init();
+
+            return raceTrackerProvider;
+          },
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ResultProvider(FirebaseResultRepository()),
+        ),
       ],
       child: child,
     );

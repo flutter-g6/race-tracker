@@ -4,7 +4,6 @@ import 'package:race_tracker/data/repository/firebase/firebase_participant_repos
 import 'package:race_tracker/data/repository/firebase/firebase_race_repository.dart';
 import 'package:race_tracker/data/repository/segment_tracker_repository.dart';
 import 'package:race_tracker/model/participant.dart';
-import 'package:race_tracker/model/race.dart';
 import 'package:race_tracker/model/segment_record.dart';
 
 class FirebaseSegmentTrackerRepository extends SegmentTrackerRepository {
@@ -12,11 +11,6 @@ class FirebaseSegmentTrackerRepository extends SegmentTrackerRepository {
   final FirebaseParticipantRepository _participantRepository =
       FirebaseParticipantRepository();
   final _db = FirebaseDatabase.instance.ref();
-
-  Future<bool> _isRaceOngoing(String raceId) async {
-    final status = await _raceRepository.getRaceStatus(raceId);
-    return status == RaceStatus.ongoing;
-  }
 
   Future<String> getActiveRaceId() async {
     final raceId = await _raceRepository.getCurrentRaceId();
@@ -37,9 +31,6 @@ class FirebaseSegmentTrackerRepository extends SegmentTrackerRepository {
   @override
   Future<void> startAllParticipantsForSegment(Segment segment) async {
     final raceId = await getActiveRaceId();
-    if (!await _isRaceOngoing(raceId)) {
-      throw Exception("Race is not ongoing");
-    }
 
     final List<Participant> participants =
         await _participantRepository.getParticipants();

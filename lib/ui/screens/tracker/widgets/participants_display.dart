@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:race_tracker/ui/provider/participants_tracking_provider.dart';
 import 'package:race_tracker/ui/widgets/actions/rt_start_button_list_tile.dart';
 
+import '../../../../model/segment_record.dart';
 import '../../../widgets/actions/rt_start_button_grid.dart';
 import '../../../theme/theme.dart';
 import '../../../widgets/display/rt_divider.dart';
@@ -10,7 +11,9 @@ import 'display_mode_selector.dart';
 import 'participant_range_selector.dart';
 
 class ParticipantDisplay extends StatefulWidget {
-  const ParticipantDisplay({super.key});
+  const ParticipantDisplay({super.key, required this.segment});
+
+  final Segment segment;
 
   @override
   State<ParticipantDisplay> createState() => _ParticipantDisplayState();
@@ -97,7 +100,7 @@ class _ParticipantDisplayState extends State<ParticipantDisplay> {
                 ),
                 RtStartButtonListTile(
                   participant: participant,
-                  segment: provider.selectedSport,
+                  segment: widget.segment,
                 ),
               ],
             ),

@@ -18,7 +18,6 @@ class RtStartButtonListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final raceTracker = context.watch<RaceTrackerProvider>();
-    
     final isStarted = raceTracker.isStarted(participant);
     final isFinished = raceTracker.isFinished(participant, segment);
     final elapsed = raceTracker.getElapsed(participant);
