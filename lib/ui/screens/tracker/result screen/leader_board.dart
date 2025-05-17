@@ -26,23 +26,29 @@ class LeaderBoard extends StatelessWidget {
           return Center(
             child: Padding(
               padding: const EdgeInsets.all(RTSpacings.m),
-              child: provider.isLoading
-                  ? const CircularProgressIndicator()
-                  : results == null || results.isEmpty
+              child:
+                  provider.isLoading
+                      ? const CircularProgressIndicator()
+                      : results == null || results.isEmpty
                       ? const Text('No results found')
                       : ResultTable(
-                          title: 'Overall Leaderboard',
-                          data: results
-                              .asMap()
-                              .entries
-                              .map((entry) => {
+                        title: 'Overall Leaderboard',
+                        data:
+                            results
+                                .asMap()
+                                .entries
+                                .map(
+                                  (entry) => {
                                     'rank': '${entry.key + 1}',
                                     'bib': entry.value.bib,
                                     'name': entry.value.name,
-                                    'runtime': _formatDuration(entry.value.totalDuration),
-                                  })
-                              .toList(),
-                        ),
+                                    'runtime': _formatDuration(
+                                      entry.value.totalDuration,
+                                    ),
+                                  },
+                                )
+                                .toList(),
+                      ),
             ),
           );
         },

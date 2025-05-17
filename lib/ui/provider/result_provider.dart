@@ -16,7 +16,8 @@ class ResultProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   List<OverallResult>? get overallResults => _overallResults;
 
-  List<SegmentResult>? getSegmentResults(Segment segment) => _segmentResults[segment];
+  List<SegmentResult>? getSegmentResults(Segment segment) =>
+      _segmentResults[segment];
 
   Future<void> fetchSegmentResults(Segment segment) async {
     _isLoading = true;

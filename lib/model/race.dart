@@ -25,5 +25,4 @@ class Race {
       finishTime: finishTime ?? this.finishTime,
     );
   }
-
 }

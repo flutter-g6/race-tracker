@@ -13,8 +13,12 @@ class RaceDto {
     return Race(
       id: id,
       status: RaceStatus.values.firstWhere((e) => e.name == json['status']),
-      startTime: json['startTime'] != null ? DateTime.parse(json['startTime']) : null,
-      finishTime: json['finishTime'] != null ? DateTime.parse(json['finishTime']) : null,
+      startTime:
+          json['startTime'] != null ? DateTime.parse(json['startTime']) : null,
+      finishTime:
+          json['finishTime'] != null
+              ? DateTime.parse(json['finishTime'])
+              : null,
     );
   }
 }

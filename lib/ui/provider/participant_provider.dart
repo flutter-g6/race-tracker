@@ -29,7 +29,6 @@ class ParticipantProvider extends ChangeNotifier {
       participantState = AsyncValue.success(
         await _repository.getParticipants(),
       );
-      
     } catch (error) {
       participantState = AsyncValue.error(error);
     }
@@ -56,18 +55,18 @@ class ParticipantProvider extends ChangeNotifier {
   }
 
   void addParticipant(Participant participant) async {
-  final oldData = participantState?.data ?? [];
+    final oldData = participantState?.data ?? [];
 
-  try {
+    try {
       // 1. Add to backend and wait for full participant (with bib and id)
       await _repository.addParticipant(participant);
-      
+
       // 2. Refetch only the last one from backend (or refetch all if needed)
       final freshList = await _repository.getParticipants();
 
       // 3. Add the new confirmed participant to local cache
       final temp = List<Participant>.from(oldData);
-      final newOne = freshList.last; 
+      final newOne = freshList.last;
 
       temp.add(newOne);
       participantState = AsyncValue.success(temp);

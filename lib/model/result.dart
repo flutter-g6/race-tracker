@@ -3,7 +3,11 @@ class SegmentResult {
   final String name;
   final Duration duration;
 
-  SegmentResult({required this.bib, required this.name, required this.duration});
+  SegmentResult({
+    required this.bib,
+    required this.name,
+    required this.duration,
+  });
 }
 
 class OverallResult {
@@ -11,5 +15,9 @@ class OverallResult {
   final String name;
   final Duration totalDuration;
 
-  OverallResult({required this.bib, required this.name, required this.totalDuration});
+  OverallResult({
+    required this.bib,
+    required this.name,
+    required this.totalDuration,
+  });
 }

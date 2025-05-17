@@ -11,7 +11,7 @@ class ParticipantDto {
     };
   }
 
-  static Participant fromJson( Map<String, dynamic> json, String id) {
+  static Participant fromJson(Map<String, dynamic> json, String id) {
     return Participant(
       id: id,
       bib: json['bib'],

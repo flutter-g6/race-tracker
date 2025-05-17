@@ -25,23 +25,29 @@ class CycleTracking extends StatelessWidget {
           return Center(
             child: Padding(
               padding: const EdgeInsets.all(16),
-              child: provider.isLoading
-                  ? const CircularProgressIndicator()
-                  : results == null || results.isEmpty
+              child:
+                  provider.isLoading
+                      ? const CircularProgressIndicator()
+                      : results == null || results.isEmpty
                       ? const Text('No results found')
                       : ResultTable(
-                          title: 'Cycling',
-                          data: results
-                              .asMap()
-                              .entries
-                              .map((entry) => {
+                        title: 'Cycling',
+                        data:
+                            results
+                                .asMap()
+                                .entries
+                                .map(
+                                  (entry) => {
                                     'rank': '${entry.key + 1}',
                                     'bib': entry.value.bib,
                                     'name': entry.value.name,
-                                    'runtime': _formatDuration(entry.value.duration),
-                                  })
-                              .toList(),
-                        ),
+                                    'runtime': _formatDuration(
+                                      entry.value.duration,
+                                    ),
+                                  },
+                                )
+                                .toList(),
+                      ),
             ),
           );
         },

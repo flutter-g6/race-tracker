@@ -23,26 +23,28 @@ class RaceTrackerProvider extends ChangeNotifier {
   // I am weirdly implement this
   // The goal here is for the provider to be able to listen the race status in real time.
   // But, I want to cache the rece id and start time
-  // So always listening but cached? 
+  // So always listening but cached?
   Future<void> init() async {
     if (_statusSubscription != null) return;
 
-    _statusSubscription = _firebaseRaceRepository!
-        .watchIsRaceOngoing()
-        .listen((isOngoing) async {
-          if (isOngoing) {
-            String? id = await _firebaseRaceRepository.getCurrentRaceId();
-            _cachedRaceId = id;
+    _statusSubscription = _firebaseRaceRepository!.watchIsRaceOngoing().listen((
+      isOngoing,
+    ) async {
+      if (isOngoing) {
+        String? id = await _firebaseRaceRepository.getCurrentRaceId();
+        _cachedRaceId = id;
 
-            DateTime startTime = await _firebaseRaceRepository.getRaceStartTime(id ?? '');
-            _cacheStartTime = startTime;
-          } else {
-            _cachedRaceId = null;
-            _cacheStartTime = null;
-          }
+        DateTime startTime = await _firebaseRaceRepository.getRaceStartTime(
+          id ?? '',
+        );
+        _cacheStartTime = startTime;
+      } else {
+        _cachedRaceId = null;
+        _cacheStartTime = null;
+      }
 
-          notifyListeners();
-        });
+      notifyListeners();
+    });
   }
 
   String? get currentRaceId => _cachedRaceId;

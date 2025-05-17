@@ -13,24 +13,26 @@ class DisplayModeSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<ParticipantsTrackingProvider>();
-    
+
     return Row(
       children: [
         RTButton(
           text: 'List',
           icon: Icons.list,
-          type: provider.displayMode == DisplayMode.list
-              ? ButtonType.primary
-              : ButtonType.secondary,
+          type:
+              provider.displayMode == DisplayMode.list
+                  ? ButtonType.primary
+                  : ButtonType.secondary,
           onPressed: () => provider.setDisplayMode(DisplayMode.list),
         ),
         const SizedBox(width: RTSpacings.s),
         RTButton(
           text: 'Grid',
           icon: Icons.grid_view,
-          type: provider.displayMode == DisplayMode.grid
-              ? ButtonType.primary
-              : ButtonType.secondary,
+          type:
+              provider.displayMode == DisplayMode.grid
+                  ? ButtonType.primary
+                  : ButtonType.secondary,
           onPressed: () => provider.setDisplayMode(DisplayMode.grid),
         ),
       ],

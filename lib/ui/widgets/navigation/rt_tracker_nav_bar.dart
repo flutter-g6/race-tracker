@@ -19,7 +19,7 @@ class RTTrackerNavBar extends StatelessWidget {
     Icons.pool,
     Icons.directions_bike,
     Icons.directions_run,
-    Icons.check_circle
+    Icons.check_circle,
   ];
 
   @override

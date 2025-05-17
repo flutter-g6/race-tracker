@@ -55,7 +55,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '236544433373',
     projectId: 'race-tracker-118ab',
     authDomain: 'race-tracker-118ab.firebaseapp.com',
-    databaseURL: 'https://race-tracker-118ab-default-rtdb.asia-southeast1.firebasedatabase.app',
+    databaseURL:
+        'https://race-tracker-118ab-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'race-tracker-118ab.firebasestorage.app',
   );
 
@@ -64,8 +65,8 @@ class DefaultFirebaseOptions {
     appId: '1:236544433373:android:73985249f473559b5b0f34',
     messagingSenderId: '236544433373',
     projectId: 'race-tracker-118ab',
-    databaseURL: 'https://race-tracker-118ab-default-rtdb.asia-southeast1.firebasedatabase.app',
+    databaseURL:
+        'https://race-tracker-118ab-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'race-tracker-118ab.firebasestorage.app',
   );
-
 }
