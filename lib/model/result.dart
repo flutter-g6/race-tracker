@@ -1,23 +1,11 @@
-class SegmentResult {
+class Result {
   final String bib;
   final String name;
   final Duration duration;
 
-  SegmentResult({
+  Result({
     required this.bib,
     required this.name,
     required this.duration,
-  });
-}
-
-class OverallResult {
-  final String bib;
-  final String name;
-  final Duration totalDuration;
-
-  OverallResult({
-    required this.bib,
-    required this.name,
-    required this.totalDuration,
   });
 }

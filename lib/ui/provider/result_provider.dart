@@ -3,55 +3,47 @@ import 'package:race_tracker/data/repository/result_repository.dart';
 import 'package:race_tracker/model/result.dart';
 import 'package:race_tracker/model/segment_record.dart';
 
+import '../../data/repository/race_repository.dart';
+
 class ResultProvider extends ChangeNotifier {
   final ResultRepository resultRepository;
+  final RaceRepository raceRepository;
 
-  ResultProvider(this.resultRepository);
+  ResultProvider(this.resultRepository, this.raceRepository);
 
-  final Map<Segment, List<SegmentResult>> _segmentResults = {};
-  List<OverallResult>? _overallResults;
+  Future<List<Result>>? getSegmentResults(Segment segment) async {
+    final data = await resultRepository.getSegmentData(segment.name);
 
-  bool _isLoading = false;
+    final raceId = await raceRepository.getCurrentRaceId();
+    final startTime = await raceRepository.getRaceStartTime(raceId!);
 
-  bool get isLoading => _isLoading;
-  List<OverallResult>? get overallResults => _overallResults;
+    data.updateAll(
+      (key, value) => {...value, 'startTime': startTime.toIso8601String()},
+    );
 
-  List<SegmentResult>? getSegmentResults(Segment segment) =>
-      _segmentResults[segment];
+    final results =
+        data.entries
+            .map(
+              (entry) => _parseSegmentResult(
+                entry.key,
+                Map<String, dynamic>.from(entry.value),
+              ),
+            )
+            .toList();
+    results.sort((a, b) => a.duration.compareTo(b.duration));
 
-  Future<void> fetchSegmentResults(Segment segment) async {
-    _isLoading = true;
-    notifyListeners();
-
-    final results = await resultRepository.getSegmentResults(segment);
-    _segmentResults[segment] = results;
-
-    _isLoading = false;
-    notifyListeners();
+    return results;
   }
 
-  Future<void> fetchOverallResults() async {
-    _isLoading = true;
-    notifyListeners();
-
-    _overallResults = await resultRepository.getOverallResults();
-
-    _isLoading = false;
-    notifyListeners();
+  Result _parseSegmentResult(String bib, Map<String, dynamic> data) {
+    final start = DateTime.parse(data['startTime']);
+    final finish = DateTime.parse(data['finishTime']);
+    final duration = finish.difference(start);
+    return Result(bib: bib, name: data['fullName'], duration: duration);
   }
 
-  Future<void> fetchAll() async {
-    _isLoading = true;
-    notifyListeners();
-
-    await Future.wait([
-      fetchSegmentResults(Segment.swim),
-      fetchSegmentResults(Segment.run),
-      fetchSegmentResults(Segment.cycle),
-      fetchOverallResults(),
-    ]);
-
-    _isLoading = false;
-    notifyListeners();
+  Future<List<Result>?> getOverallResults() async {
+    final data = await resultRepository.getOverallData();
+    return null;
   }
 }

@@ -45,7 +45,11 @@ class ProviderScope extends StatelessWidget {
           },
         ),
         ChangeNotifierProvider(
-          create: (_) => ResultProvider(FirebaseResultRepository()),
+          create:
+              (_) => ResultProvider(
+                FirebaseResultRepository(),
+                FirebaseRaceRepository(),
+              ),
         ),
       ],
       child: child,

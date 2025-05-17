@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../theme/theme.dart';
+import '../../../../model/result.dart';
 import '../../../widgets/display/result_table.dart';
 import '../../../provider/result_provider.dart';
 
@@ -14,42 +14,43 @@ class LeaderBoard extends StatelessWidget {
       appBar: AppBar(title: const Text('Leader Board'), centerTitle: true),
       body: Consumer<ResultProvider>(
         builder: (context, provider, _) {
-          final results = provider.overallResults;
+          return FutureBuilder<List<Result>?>(
+            future: provider.getOverallResults(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-          // Trigger fetch if not already done
-          if (results == null && !provider.isLoading) {
-            Future.microtask(() {
-              provider.fetchOverallResults();
-            });
-          }
+              final results = snapshot.data;
 
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(RTSpacings.m),
-              child:
-                  provider.isLoading
-                      ? const CircularProgressIndicator()
-                      : results == null || results.isEmpty
-                      ? const Text('No results found')
-                      : ResultTable(
-                        title: 'Overall Leaderboard',
-                        data:
-                            results
-                                .asMap()
-                                .entries
-                                .map(
-                                  (entry) => {
-                                    'rank': '${entry.key + 1}',
-                                    'bib': entry.value.bib,
-                                    'name': entry.value.name,
-                                    'runtime': _formatDuration(
-                                      entry.value.totalDuration,
-                                    ),
-                                  },
-                                )
-                                .toList(),
-                      ),
-            ),
+              if (results == null || results.isEmpty) {
+                return const Center(child: Text('No results found'));
+              }
+
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: ResultTable(
+                    title: 'Leader Board',
+                    data:
+                        results
+                            .asMap()
+                            .entries
+                            .map(
+                              (entry) => {
+                                'rank': '${entry.key + 1}',
+                                'bib': entry.value.bib,
+                                'name': entry.value.name,
+                                'runtime': _formatDuration(
+                                  entry.value.duration,
+                                ),
+                              },
+                            )
+                            .toList(),
+                  ),
+                ),
+              );
+            },
           );
         },
       ),

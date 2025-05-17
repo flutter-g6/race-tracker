@@ -71,4 +71,20 @@ class FirebaseParticipantRepository extends ParticipantRepository {
         .child(participant.id)
         .set(ParticipantDto.toJson(participant));
   }
+
+  Future<Participant?> getParticipantByBib(String bib) async {
+    final DatabaseReference ref = FirebaseDatabase.instance.ref('participants');
+
+    final snapshot = await ref.orderByChild('bib').equalTo(bib).once();
+
+    if (snapshot.snapshot.exists) {
+      // Assuming bib is unique, return the first matched participant
+      final data = snapshot.snapshot.value as Map;
+      final participantEntry = data.entries.first;
+      final participant = Map<String, dynamic>.from(participantEntry.value);
+      return ParticipantDto.fromJson(participant, participantEntry.key);
+    } else {
+      return null; // No participant found
+    }
+  }
 }

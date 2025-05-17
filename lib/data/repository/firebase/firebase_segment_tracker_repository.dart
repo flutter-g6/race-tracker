@@ -20,12 +20,19 @@ class FirebaseSegmentTrackerRepository extends SegmentTrackerRepository {
 
   @override
   Future<void> finishSegment(String bib, Segment segment) async {
-    final raceId = await getActiveRaceId();
+    // record finish time on top of await line so that it is not pasuing
     final finishTime = DateTime.now().toIso8601String();
-    final finishRef = _db.child(
-      'race_segments/$raceId/${segment.name}/$bib/finishTime',
-    );
-    await finishRef.set(finishTime);
+
+    final Participant? participant = await _participantRepository.getParticipantByBib(bib);
+    if (participant == null) {
+      throw Exception("Participant with bib $bib not found");
+    }
+
+    final raceId = await getActiveRaceId();
+
+    final ref = _db.child('race_segments/$raceId/${segment.name}/$bib');
+
+    await ref.set({'bib': bib, 'fullName': '${participant.firstName} ${participant.lastName}', 'finishTime': finishTime});
   }
 
   @override
