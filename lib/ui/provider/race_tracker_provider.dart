@@ -72,6 +72,20 @@ class RaceTrackerProvider extends ChangeNotifier {
     return _finishedSegments[participant]?.contains(segment) ?? false;
   }
 
+  bool canFinishSegment(Participant participant, Segment segment) {
+    switch (segment) {
+      case Segment.swim:
+        // Swimming is always available
+        return true;
+      case Segment.cycle:
+        // Cycling is available only if swim is finished
+        return isFinished(participant, Segment.swim);
+      case Segment.run:
+        // Running is available only if cycle is finished
+        return isFinished(participant, Segment.cycle);
+    }
+  }
+
   @override
   void dispose() {
     _statusSubscription?.cancel();

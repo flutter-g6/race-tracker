@@ -20,6 +20,7 @@ class RtStartButtonListTile extends StatelessWidget {
     final raceTracker = context.watch<RaceTrackerProvider>();
     final isStarted = raceTracker.isStarted(participant);
     final isFinished = raceTracker.isFinished(participant, segment);
+    final canFinish = raceTracker.canFinishSegment(participant, segment);
     final elapsed = raceTracker.getElapsed(participant);
 
     // Handle the "Finish" button tap
@@ -36,25 +37,25 @@ class RtStartButtonListTile extends StatelessWidget {
 
     Color getButtonColor(Duration elapsed) {
       if (isFinished) return RTColors.secondary;
-      return elapsed == Duration.zero ? RTColors.disabled : RTColors.primary;
+      if (isStarted && !isFinished && canFinish) return RTColors.primary;
+      return RTColors.disabled;
     }
 
-    VoidCallback? getOnTap(bool isStarted, bool isFinished) {
-      // Finish screen:
-      // If never started and not finished — disable
-      if (!isStarted && !isFinished) return null;
-
-      // If started and not finished — allow finish
-      if (isStarted && !isFinished) return handleFinish;
-
+    VoidCallback? getOnTap() {
       // If finished, allow reset
       if (isFinished) return handleReset;
 
+      // Is Started is checking if the manager has started the race
+      // Is not finished is self explanatory
+      // Can finish because the last segment is finished
+      if (isStarted && !isFinished && canFinish) return handleFinish;
+
+      // Otherwise, disable
       return null;
     }
 
     return GestureDetector(
-      onTap: getOnTap(isStarted, isFinished),
+      onTap: getOnTap(),
       child: Container(
         padding: const EdgeInsets.symmetric(
           vertical: RTSpacings.s,
@@ -72,9 +73,9 @@ class RtStartButtonListTile extends StatelessWidget {
               isFinished ? "Reset" : "Finish",
               style: RTTextStyles.body.copyWith(
                 color:
-                    (elapsed == Duration.zero && !isFinished)
-                        ? RTColors.disabled
-                        : RTColors.white,
+                    (isFinished || (isStarted && !isFinished && canFinish))
+                        ? RTColors.white
+                        : RTColors.disabled,
               ),
             ),
           ],
