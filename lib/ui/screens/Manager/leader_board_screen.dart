@@ -9,10 +9,7 @@ class LeaderBoardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: RTTopBar(
-        title: 'Leader Board',
-        centerTitle: true,
-      ),
+      appBar: RTTopBar(title: 'Leader Board', centerTitle: true),
       body: Center(child: Text('LeaderBoard Screen')),
       bottomNavigationBar: const RTNavBar(),
     );

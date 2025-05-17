@@ -29,7 +29,6 @@ class ParticipantProvider extends ChangeNotifier {
       participantState = AsyncValue.success(
         await _repository.getParticipants(),
       );
-      print(participantState?.data);
       
     } catch (error) {
       participantState = AsyncValue.error(error);

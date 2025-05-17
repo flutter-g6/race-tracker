@@ -3,7 +3,7 @@ import 'package:race_tracker/ui/screens/authentication/signup_screen.dart';
 import '../../../service/auth_service.dart';
 import '../../theme/theme.dart';
 import 'package:race_tracker/ui/screens/manager/home_screen.dart';
-import 'package:race_tracker/ui/screens/tracker/start_time_screen.dart';
+import 'package:race_tracker/ui/screens/tracker/track_swimming_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   final String selectedRole;
@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
       } else if (result == 'Tracker') {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const StartTimeScreen()),
+          MaterialPageRoute(builder: (_) => const TrackSwimmingScreen()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
