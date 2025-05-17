@@ -17,8 +17,8 @@ class RTTrackerNavBar extends StatelessWidget {
 
   static final List<IconData> _icons = [
     Icons.pool,
-    Icons.directions_run,
     Icons.directions_bike,
+    Icons.directions_run,
     Icons.check_circle
   ];
 
