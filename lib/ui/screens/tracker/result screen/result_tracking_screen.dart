@@ -22,15 +22,6 @@ class ResultTrackingScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             ResultListTile(
-              title: 'Running',
-              trailingIcon: Icons.arrow_forward_ios,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (ctx) => const RunTracking()),
-                );
-              },
-            ),
-            ResultListTile(
               title: 'Swimming',
               trailingIcon: Icons.arrow_forward_ios,
               onTap: () {
@@ -45,6 +36,15 @@ class ResultTrackingScreen extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (ctx) => const CycleTracking()),
+                );
+              },
+            ),
+            ResultListTile(
+              title: 'Running',
+              trailingIcon: Icons.arrow_forward_ios,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (ctx) => const RunTracking()),
                 );
               },
             ),

@@ -73,9 +73,7 @@ class FirebaseParticipantRepository extends ParticipantRepository {
   }
 
   Future<Participant?> getParticipantByBib(String bib) async {
-    final DatabaseReference ref = FirebaseDatabase.instance.ref('participants');
-
-    final snapshot = await ref.orderByChild('bib').equalTo(bib).once();
+    final snapshot = await _databaseRef.orderByChild('bib').equalTo(bib).once();
 
     if (snapshot.snapshot.exists) {
       // Assuming bib is unique, return the first matched participant

@@ -21,24 +21,43 @@ class ResultProvider extends ChangeNotifier {
       (key, value) => {...value, 'startTime': startTime.toIso8601String()},
     );
 
-    final results =
+    final futureResults =
         data.entries
             .map(
               (entry) => _parseSegmentResult(
                 entry.key,
                 Map<String, dynamic>.from(entry.value),
+                segment,
               ),
             )
             .toList();
+
+    final results = await Future.wait(futureResults);
+
     results.sort((a, b) => a.duration.compareTo(b.duration));
 
     return results;
   }
 
-  Result _parseSegmentResult(String bib, Map<String, dynamic> data) {
-    final start = DateTime.parse(data['startTime']);
-    final finish = DateTime.parse(data['finishTime']);
-    final duration = finish.difference(start);
+  Future<Result> _parseSegmentResult(
+    String bib,
+    Map<String, dynamic> data,
+    Segment segment,
+  ) async {
+    DateTime startTime;
+    DateTime finishTime = DateTime.parse(data['finishTime']);
+    switch (segment) {
+      case Segment.swim:
+        startTime = DateTime.parse(data['startTime']);
+        break;
+      case Segment.cycle:
+        startTime = DateTime.parse(await resultRepository.getSwimTimeFor(bib));
+        break;
+      default:
+        startTime = DateTime.parse(await resultRepository.getCycleTimeFor(bib));
+    }
+
+    final duration = finishTime.difference(startTime);
     return Result(bib: bib, name: data['fullName'], duration: duration);
   }
 

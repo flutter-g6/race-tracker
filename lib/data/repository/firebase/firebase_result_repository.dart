@@ -35,6 +35,35 @@ class FirebaseResultRepository extends ResultRepository {
   }
 
   @override
+  Future<String> getSwimTimeFor(String bib) async {
+    final raceId = await _segmentTrackerRepository.getActiveRaceId();
+    final snapshot = await _db.child('race_segments/$raceId/swim/$bib').get();
+
+    final data = snapshot.value as Map<dynamic, dynamic>?;
+    final finishTime = data?['finishTime'] as String?;
+
+    if (finishTime == null) {
+      throw Exception("finishTime on swim segment not found for bib $bib");
+    }
+
+    return finishTime;
+  }
+
+  @override
+  Future<String> getCycleTimeFor(String bib) async {
+    final raceId = await _segmentTrackerRepository.getActiveRaceId();
+    final snapshot = await _db.child('race_segments/$raceId/cycle/$bib').get();
+
+    final data = snapshot.value as Map<dynamic, dynamic>?;
+    final finishTime = data?['finishTime'] as String?;
+
+    if (finishTime == null) {
+      throw Exception("finishTime on cycle segment not found for bib $bib");
+    }
+    return finishTime;
+  }
+
+  @override
   Future<List<Result>> getOverallData() {
     // TODO: implement getOverallData
     throw UnimplementedError();
