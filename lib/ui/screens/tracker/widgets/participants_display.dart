@@ -10,9 +10,7 @@ import 'display_mode_selector.dart';
 import 'participant_range_selector.dart';
 
 class ParticipantDisplay extends StatefulWidget {
-  const ParticipantDisplay({super.key, required this.isStartScreen});
-
-  final bool isStartScreen;
+  const ParticipantDisplay({super.key});
 
   @override
   State<ParticipantDisplay> createState() => _ParticipantDisplayState();
@@ -64,7 +62,6 @@ class _ParticipantDisplayState extends State<ParticipantDisplay> {
     return switch (provider.displayMode) {
       DisplayMode.list => _buildListView(provider),
       DisplayMode.grid => _buildGridView(provider),
-      DisplayMode.massStart => _buildMassStartButton(provider),
     };
   }
 
@@ -101,7 +98,6 @@ class _ParticipantDisplayState extends State<ParticipantDisplay> {
                 RtStartButtonListTile(
                   participant: participant,
                   segment: provider.selectedSport,
-                  isStartButton: widget.isStartScreen,
                 ),
               ],
             ),
@@ -125,31 +121,6 @@ class _ParticipantDisplayState extends State<ParticipantDisplay> {
         itemBuilder: (context, index) {
           final participant = provider.participants[index];
           return Center(child: RtStartButtonGrid(bib: participant.bib));
-        },
-      ),
-    );
-  }
-
-  Widget _buildMassStartButton(ParticipantsTrackingProvider provider) {
-    return Center(
-      child: ElevatedButton.icon(
-        icon: Icon(Icons.play_arrow, color: RTColors.white),
-        label: Text(
-          'Start All Participants',
-          style: RTTextStyles.button.copyWith(color: RTColors.white),
-        ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: RTColors.primary,
-          padding: const EdgeInsets.symmetric(
-            horizontal: RTSpacings.l,
-            vertical: RTSpacings.m,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(RTSpacings.radius),
-          ),
-        ),
-        onPressed: () {
-          //
         },
       ),
     );

@@ -5,7 +5,7 @@ import 'package:race_tracker/ui/provider/participants_tracking_provider.dart';
 import '../../../theme/theme.dart';
 import '../../../widgets/actions/rt_button.dart';
 
-enum DisplayMode { list, grid, massStart }
+enum DisplayMode { list, grid }
 
 class DisplayModeSelector extends StatelessWidget {
   const DisplayModeSelector({super.key});
@@ -32,15 +32,6 @@ class DisplayModeSelector extends StatelessWidget {
               ? ButtonType.primary
               : ButtonType.secondary,
           onPressed: () => provider.setDisplayMode(DisplayMode.grid),
-        ),
-        const SizedBox(width: RTSpacings.s),
-        RTButton(
-          text: 'Mass Start',
-          icon: Icons.start,
-          type: provider.displayMode == DisplayMode.massStart
-              ? ButtonType.primary
-              : ButtonType.secondary,
-          onPressed: () => provider.setDisplayMode(DisplayMode.massStart),
         ),
       ],
     );

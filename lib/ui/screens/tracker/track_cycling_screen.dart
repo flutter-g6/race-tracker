@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../theme/theme.dart';
 import '../../widgets/navigation/rt_top_bar.dart';
 import '../../widgets/navigation/rt_tracker_nav_bar.dart';
+import 'widgets/display_mode_selector.dart';
+import 'widgets/participants_display.dart';
 
 class TrackCyclingScreen extends StatelessWidget {
   const TrackCyclingScreen({super.key});
@@ -9,11 +12,18 @@ class TrackCyclingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: RTTopBar(
-        title: 'Cycling',
-        centerTitle: true,
+      backgroundColor: RTColors.bgColor,
+      appBar: const RTTopBar(title: 'Cycling', centerTitle: true),
+      body: const Padding(
+        padding: EdgeInsets.all(RTSpacings.s),
+        child: Column(
+          children: [
+            SizedBox(height: RTSpacings.s),
+            DisplayModeSelector(),
+            Expanded(child: ParticipantDisplay()),
+          ],
+        ),
       ),
-      body: Center(child: Text('LeaderBoard Screen')),
       bottomNavigationBar: const RTTrackerNavBar(),
     );
   }
