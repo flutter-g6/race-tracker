@@ -47,17 +47,6 @@ class RtStartButtonListTile extends StatelessWidget {
           );
           return;
         }
-
-        // Proceed with starting the participant tracking
-        if (!isStarted) {
-          raceTracker.startParticipant(participant, segment);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Participant tracking started!'),
-              duration: Duration(seconds: 2),
-            ),
-          );
-        }
       } catch (e) {
         // Handle any errors during the check
         ScaffoldMessenger.of(context).showSnackBar(
