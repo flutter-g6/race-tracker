@@ -1,7 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:race_tracker/data/repository/firebase/firebase_segment_tracker_repository.dart';
 import 'package:race_tracker/data/repository/result_repository.dart';
-import 'package:race_tracker/model/result.dart';
 
 class FirebaseResultRepository extends ResultRepository {
   final _db = FirebaseDatabase.instance.ref();
@@ -62,9 +61,9 @@ class FirebaseResultRepository extends ResultRepository {
     }
     return finishTime;
   }
-
+  
   @override
-  Future<List<Result>> getOverallData() {
+  Future<List<Map<String, dynamic>>> getOverallData() {
     // TODO: implement getOverallData
     throw UnimplementedError();
   }
