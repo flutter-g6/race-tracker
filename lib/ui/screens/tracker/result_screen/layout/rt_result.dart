@@ -19,7 +19,7 @@ class RTResult extends StatelessWidget {
       body: Consumer<ResultProvider>(
         builder: (context, provider, _) {
           return FutureBuilder<List<Result>>(
-            future: provider.getSegmentResults(Segment.run),
+            future: provider.getSegmentResults(segment),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
