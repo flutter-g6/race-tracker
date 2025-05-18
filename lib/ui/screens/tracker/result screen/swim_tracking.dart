@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:race_tracker/model/segment_record.dart';
 
 import '../../../../model/result.dart';
-import '../../../theme/theme.dart';
 import '../../../widgets/display/result_table.dart';
 import '../../../provider/result_provider.dart';
 
@@ -13,7 +12,6 @@ class SwimTracking extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: RTColors.bgColor,
       appBar: AppBar(title: const Text('Swimming Tracking'), centerTitle: true),
       body: Consumer<ResultProvider>(
         builder: (context, provider, _) {
