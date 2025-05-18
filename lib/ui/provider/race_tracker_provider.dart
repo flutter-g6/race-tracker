@@ -64,7 +64,13 @@ class RaceTrackerProvider extends ChangeNotifier {
   bool isStarted(Participant participant) => _cacheStartTime != null;
 
   void resetParticipant(Participant participant, Segment segment) {
-    _finishedSegments.remove(participant);
+    final finished = _finishedSegments[participant];
+    if (finished != null) {
+      finished.remove(segment);
+      if (finished.isEmpty) {
+        _finishedSegments.remove(participant);
+      }
+    }
     notifyListeners();
   }
 
