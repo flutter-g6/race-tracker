@@ -4,7 +4,7 @@ import 'package:race_tracker/ui/screens/manager/leader_board_screen.dart';
 import 'package:race_tracker/ui/screens/role/role_selection_screen.dart';
 import 'package:race_tracker/ui/screens/tracker/track_cycling_screen.dart';
 import 'package:race_tracker/ui/screens/tracker/track_running_screen.dart';
-import 'package:race_tracker/ui/screens/tracker/result%20screen/result_tracking_screen.dart';
+import 'package:race_tracker/ui/screens/tracker/result_screen/result_option_screen.dart';
 
 import 'firebase_options.dart';
 import 'provider_scope.dart';
@@ -37,7 +37,7 @@ class RaceTrackerApp extends StatelessWidget {
         '/swimming': (context) => const TrackSwimmingScreen(),
         '/running': (context) => const TrackRunningScreen(),
         '/cycling': (context) => const TrackCyclingScreen(),
-        '/result-tracking-time': (context) => const ResultTrackingScreen(),
+        '/result-tracking-time': (context) => const ResultOptionScreen(),
       },
     );
   }

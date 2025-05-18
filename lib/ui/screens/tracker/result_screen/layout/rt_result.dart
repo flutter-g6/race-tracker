@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:race_tracker/model/segment_record.dart';
+import '../../../../../model/result.dart';
+import '../../../../widgets/display/result_table.dart';
+import '../../../../provider/result_provider.dart';
 
-import '../../../../model/result.dart';
-import '../../../theme/theme.dart';
-import '../../../widgets/display/result_table.dart';
-import '../../../provider/result_provider.dart';
+class RTResult extends StatelessWidget {
+  final Segment segment;
+  final String title;
 
-class SwimTracking extends StatelessWidget {
-  const SwimTracking({super.key});
+  const RTResult({
+    super.key,
+    required this.segment,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: RTColors.bgColor,
-      appBar: AppBar(title: const Text('Swimming Tracking'), centerTitle: true),
+      appBar: AppBar(title: Text(title), centerTitle: true),
       body: Consumer<ResultProvider>(
         builder: (context, provider, _) {
           return FutureBuilder<List<Result>>(
-            future: provider.getSegmentResults(Segment.swim),
+            future: provider.getSegmentResults(segment),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
@@ -34,7 +38,7 @@ class SwimTracking extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: ResultTable(
-                    title: 'Cycling',
+                    title: title,
                     data:
                         results
                             .asMap()

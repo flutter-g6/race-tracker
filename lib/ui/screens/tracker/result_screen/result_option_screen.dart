@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:race_tracker/ui/screens/tracker/result%20screen/leader_board.dart';
+import 'package:race_tracker/ui/screens/tracker/result_screen/leader_board.dart';
 import 'package:race_tracker/ui/theme/theme.dart';
 
-import '../../../widgets/display/result_list_tile.dart';
 import 'cycle_tracking.dart';
 import 'run_tracking.dart';
 import 'swim_tracking.dart';
+import '../../../widgets/display/result_list_tile.dart';
 import '../../../widgets/navigation/rt_top_bar.dart';
 import '../../../widgets/navigation/rt_tracker_nav_bar.dart';
 
-class ResultTrackingScreen extends StatelessWidget {
-  const ResultTrackingScreen({super.key});
+class ResultOptionScreen extends StatelessWidget {
+  const ResultOptionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
