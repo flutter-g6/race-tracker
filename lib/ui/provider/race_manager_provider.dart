@@ -8,7 +8,7 @@ import 'package:race_tracker/ui/provider/async_value.dart';
 class RaceManagerProvider extends ChangeNotifier {
   final RaceRepository _repository;
   AsyncValue<Race>? raceState;
-  
+
   RaceManagerProvider(this._repository);
 
   bool get isLoading =>
@@ -29,6 +29,7 @@ class RaceManagerProvider extends ChangeNotifier {
   Future<String?> getCurrentRaceId() async {
     return await _repository.getCurrentRaceId();
   }
+
   // Start the Time and schedule UI updates.
   void start() async {
     try {

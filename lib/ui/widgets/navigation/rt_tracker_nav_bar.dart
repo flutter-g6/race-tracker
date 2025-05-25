@@ -9,14 +9,16 @@ class RTTrackerNavBar extends StatelessWidget {
 
   // Define routes and icons
   static final List<String> _routes = [
-    '/start-time',
-    '/finish-time',
+    '/swimming',
+    '/cycling',
+    '/running',
     '/result-tracking-time',
   ];
 
   static final List<IconData> _icons = [
-    Icons.timer,
-    Icons.stop_circle,
+    Icons.pool,
+    Icons.directions_bike,
+    Icons.directions_run,
     Icons.check_circle,
   ];
 

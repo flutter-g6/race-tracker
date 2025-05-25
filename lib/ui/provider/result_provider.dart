@@ -3,54 +3,101 @@ import 'package:race_tracker/data/repository/result_repository.dart';
 import 'package:race_tracker/model/result.dart';
 import 'package:race_tracker/model/segment_record.dart';
 
+import '../../data/repository/race_repository.dart';
+
 class ResultProvider extends ChangeNotifier {
   final ResultRepository resultRepository;
+  final RaceRepository raceRepository;
 
-  ResultProvider(this.resultRepository);
+  ResultProvider(this.resultRepository, this.raceRepository);
 
-  final Map<Segment, List<SegmentResult>> _segmentResults = {};
-  List<OverallResult>? _overallResults;
+  Future<List<Result>>? getSegmentResults(Segment segment) async {
+    final data = await resultRepository.getSegmentData(segment.name);
 
-  bool _isLoading = false;
+    final raceId = await raceRepository.getCurrentRaceId();
+    final startTime = await raceRepository.getRaceStartTime(raceId!);
 
-  bool get isLoading => _isLoading;
-  List<OverallResult>? get overallResults => _overallResults;
+    data.updateAll(
+      (key, value) => {...value, 'startTime': startTime.toIso8601String()},
+    );
 
-  List<SegmentResult>? getSegmentResults(Segment segment) => _segmentResults[segment];
+    final futureResults =
+        data.entries
+            .map(
+              (entry) => _parseSegmentResult(
+                entry.key,
+                Map<String, dynamic>.from(entry.value),
+                segment,
+              ),
+            )
+            .toList();
 
-  Future<void> fetchSegmentResults(Segment segment) async {
-    _isLoading = true;
-    notifyListeners();
+    final results = await Future.wait(futureResults);
 
-    final results = await resultRepository.getSegmentResults(segment);
-    _segmentResults[segment] = results;
+    results.sort((a, b) => a.duration.compareTo(b.duration));
 
-    _isLoading = false;
-    notifyListeners();
+    return results;
   }
 
-  Future<void> fetchOverallResults() async {
-    _isLoading = true;
-    notifyListeners();
+  Future<Result> _parseSegmentResult(
+    String bib,
+    Map<String, dynamic> data,
+    Segment segment,
+  ) async {
+    DateTime startTime;
+    DateTime finishTime = DateTime.parse(data['finishTime']);
+    switch (segment) {
+      case Segment.swim:
+        startTime = DateTime.parse(data['startTime']);
+        break;
+      case Segment.cycle:
+        startTime = DateTime.parse(await resultRepository.getSwimTimeFor(bib));
+        break;
+      default:
+        startTime = DateTime.parse(await resultRepository.getCycleTimeFor(bib));
+    }
 
-    _overallResults = await resultRepository.getOverallResults();
-
-    _isLoading = false;
-    notifyListeners();
+    final duration = finishTime.difference(startTime);
+    return Result(bib: bib, name: data['fullName'], duration: duration);
   }
 
-  Future<void> fetchAll() async {
-    _isLoading = true;
-    notifyListeners();
+  Future<List<Result>>? getOverallResults() async {
+    final data = await resultRepository.getSegmentData(Segment.run.name);
 
-    await Future.wait([
-      fetchSegmentResults(Segment.swim),
-      fetchSegmentResults(Segment.run),
-      fetchSegmentResults(Segment.cycle),
-      fetchOverallResults(),
-    ]);
+    final raceId = await raceRepository.getCurrentRaceId();
+    final startTime = await raceRepository.getRaceStartTime(raceId!);
 
-    _isLoading = false;
-    notifyListeners();
+    data.updateAll(
+      (key, value) => {...value, 'startTime': startTime.toIso8601String()},
+    );
+
+    final futureResults =
+        data.entries
+            .map(
+              (entry) => _parseOverallResult(
+                entry.key,
+                Map<String, dynamic>.from(entry.value),
+                Segment.run,
+              ),
+            )
+            .toList();
+
+    final results = await Future.wait(futureResults);
+
+    results.sort((a, b) => a.duration.compareTo(b.duration));
+
+    return results;
+  }
+
+  Future<Result> _parseOverallResult(
+    String bib,
+    Map<String, dynamic> data,
+    Segment segment,
+  ) async {
+    DateTime startTime = DateTime.parse(data['startTime']);
+    DateTime finishTime = DateTime.parse(data['finishTime']);
+
+    final duration = finishTime.difference(startTime);
+    return Result(bib: bib, name: data['fullName'], duration: duration);
   }
 }

@@ -3,71 +3,25 @@ import 'package:provider/provider.dart';
 import 'package:race_tracker/model/participant.dart';
 import '../../../model/segment_record.dart';
 import '../../provider/race_tracker_provider.dart';
-import '../../provider/race_manager_provider.dart';
 import '../../theme/theme.dart';
 
 class RtStartButtonListTile extends StatelessWidget {
   final Participant participant;
   final Segment segment;
-  final bool isStartButton;
 
   const RtStartButtonListTile({
     super.key,
     required this.participant,
     required this.segment,
-    required this.isStartButton,
   });
 
   @override
   Widget build(BuildContext context) {
     final raceTracker = context.watch<RaceTrackerProvider>();
-    final raceManager = context.watch<RaceManagerProvider>();
     final isStarted = raceTracker.isStarted(participant);
-    final elapsed = raceTracker.getElapsed(participant);
     final isFinished = raceTracker.isFinished(participant, segment);
-
-    // Format the elapsed time into a string
-    String formatTime(Duration duration) {
-      return "${duration.inMinutes.toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}.${(duration.inMilliseconds % 1000 ~/ 10).toString().padLeft(2, '0')}";
-    }
-
-    // Handle the "Start" button tap
-    void handleStart() async {
-      try {
-        // Get the current race ID from Firebase
-        final currentRaceId = await raceManager.getCurrentRaceId();
-
-        // If no race ID exists, show an error message
-        if (currentRaceId == null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('No active race. Manager must start a race first.'),
-              duration: Duration(seconds: 2),
-            ),
-          );
-          return;
-        }
-
-        // Proceed with starting the participant tracking
-        if (!isStarted) {
-          raceTracker.startParticipant(participant, segment);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Participant tracking started!'),
-              duration: Duration(seconds: 2),
-            ),
-          );
-        }
-      } catch (e) {
-        // Handle any errors during the check
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error checking race status: $e'),
-            duration: const Duration(seconds: 2),
-          ),
-        );
-      }
-    }
+    final canFinish = raceTracker.canFinishSegment(participant, segment);
+    final elapsed = raceTracker.getElapsed(participant);
 
     // Handle the "Finish" button tap
     void handleFinish() {
@@ -82,34 +36,26 @@ class RtStartButtonListTile extends StatelessWidget {
     }
 
     Color getButtonColor(Duration elapsed) {
-      if (isStartButton) {
-        return elapsed == Duration.zero ? RTColors.primary : RTColors.secondary;
-      } else {
-        if (isFinished) return RTColors.secondary;
-        return elapsed == Duration.zero ? RTColors.disabled : RTColors.primary;
-      }
+      if (isFinished) return RTColors.secondary;
+      if (isStarted && !isFinished && canFinish) return RTColors.primary;
+      return RTColors.disabled;
     }
 
-    VoidCallback? getOnTap(bool isStarted, bool isFinished) {
-      if (isStartButton) {
-        // Start screen: only allow tap if not already started
-        return isStarted ? null : handleStart;
-      } else {
-        // Finish screen:
-        // If never started and not finished — disable
-        if (!isStarted && !isFinished) return null;
+    VoidCallback? getOnTap() {
+      // If finished, allow reset
+      if (isFinished) return handleReset;
 
-        // If started and not finished — allow finish
-        if (isStarted && !isFinished) return handleFinish;
+      // Is Started is checking if the manager has started the race
+      // Is not finished is self explanatory
+      // Can finish because the last segment is finished
+      if (isStarted && !isFinished && canFinish) return handleFinish;
 
-        // If finished, allow reset
-        if (isFinished) return handleReset;
-      }
+      // Otherwise, disable
       return null;
     }
 
     return GestureDetector(
-      onTap: getOnTap(isStarted, isFinished),
+      onTap: getOnTap(),
       child: Container(
         padding: const EdgeInsets.symmetric(
           vertical: RTSpacings.s,
@@ -123,31 +69,15 @@ class RtStartButtonListTile extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (isStartButton) ...[
-              if (elapsed != Duration.zero) ...[
-                Text(
-                  formatTime(elapsed),
-                  style: RTTextStyles.body.copyWith(color: RTColors.black),
-                ),
-                const SizedBox(width: 8),
-                Icon(Icons.check, color: RTColors.success),
-              ] else ...[
-                Text(
-                  "Start",
-                  style: RTTextStyles.body.copyWith(color: RTColors.white),
-                ),
-              ],
-            ] else ...[
-              Text(
-                isFinished ? "Reset" : "Finish",
-                style: RTTextStyles.body.copyWith(
-                  color:
-                      (elapsed == Duration.zero && !isFinished)
-                          ? RTColors.disabled
-                          : RTColors.white,
-                ),
+            Text(
+              isFinished ? "Reset" : "Finish",
+              style: RTTextStyles.body.copyWith(
+                color:
+                    (isFinished || (isStarted && !isFinished && canFinish))
+                        ? RTColors.white
+                        : RTColors.disabled,
               ),
-            ],
+            ),
           ],
         ),
       ),

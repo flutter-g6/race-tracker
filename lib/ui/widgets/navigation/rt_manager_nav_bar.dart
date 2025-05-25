@@ -8,7 +8,11 @@ class RTNavBar extends StatelessWidget {
   const RTNavBar({super.key});
 
   // Define routes and icons
-  static final List<String> _routes = ['/home', '/race-manager', '/result'];
+  static final List<String> _routes = [
+    '/home',
+    '/race-manager',
+    '/leader-board',
+  ];
 
   static final List<IconData> _icons = [
     Icons.home,

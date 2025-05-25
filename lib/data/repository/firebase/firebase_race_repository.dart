@@ -3,10 +3,8 @@ import 'package:race_tracker/data/dto/race_dto.dart';
 import 'package:race_tracker/data/repository/race_repository.dart';
 import 'package:race_tracker/model/race.dart';
 
-
 class FirebaseRaceRepository extends RaceRepository {
   final _raceRef = FirebaseDatabase.instance.ref().child('races');
-  final _currentRaceIdRef = FirebaseDatabase.instance.ref('current_race_id');
 
   @override
   Future<Race> createAndStartRace() async {
@@ -39,24 +37,30 @@ class FirebaseRaceRepository extends RaceRepository {
   }
 
   @override
-  Future<RaceStatus> getRaceStatus(String raceId) async {
-    final snapshot = await _raceRef.child(raceId).child('status').get();
-    final statusString = snapshot.value as String;
-    return RaceStatus.values.firstWhere((e) => e.name == statusString);
+  Future<DateTime> getRaceStartTime(String raceId) async {
+    final snapshot = await _raceRef.child(raceId).child('startTime').get();
+    return DateTime.parse(snapshot.value as String);
   }
 
   @override
-  Stream<RaceStatus> watchRaceStatus(String raceId) {
-    return _raceRef.child(raceId).child('status').onValue.map((event) {
-      final statusString = event.snapshot.value as String;
-      return RaceStatus.values.firstWhere((e) => e.name == statusString);
+  Stream<bool> watchIsRaceOngoing() {
+    final currentRaceIdRef = FirebaseDatabase.instance.ref('current_race_id');
+
+    return currentRaceIdRef.onValue.asyncExpand((event) {
+      final raceId = event.snapshot.value as String?;
+      if (raceId == null) return Stream.value(false);
+
+      return _raceRef.child(raceId).child('status').onValue.map((statusEvent) {
+        final status = statusEvent.snapshot.value as String?;
+        return status == RaceStatus.ongoing.name;
+      });
     });
   }
 
-   @override
+  @override
   Future<String?> getCurrentRaceId() async {
-    final snapshot = await _currentRaceIdRef.get();
+    final snapshot =
+        await FirebaseDatabase.instance.ref('current_race_id').get();
     return snapshot.value as String?;
   }
-
 }

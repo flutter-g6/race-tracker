@@ -56,7 +56,7 @@ class _RTSegmentedControlState extends State<RTSegmentedControl> {
     return Text(
       sport.toString().split('.').last[0].toUpperCase() +
           sport.toString().split('.').last.substring(1),
-      style: RTTextStyles.smallButton
+      style: RTTextStyles.smallButton,
     );
   }
 

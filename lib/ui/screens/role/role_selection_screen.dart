@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:race_tracker/ui/screens/authentication/login_screen.dart';
-import '../theme/theme.dart';
+import '../../theme/theme.dart';
 
 class RoleSelectionScreen extends StatelessWidget {
   const RoleSelectionScreen({super.key});

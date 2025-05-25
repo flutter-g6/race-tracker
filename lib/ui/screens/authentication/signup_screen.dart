@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../theme/theme.dart';
-import '../role_selection_screen.dart';
+import '../role/role_selection_screen.dart';
 import 'login_screen.dart';
 import '../../../service/auth_service.dart';
 
@@ -10,7 +10,7 @@ class SignupScreen extends StatefulWidget {
   const SignupScreen({required this.role, super.key});
 
   @override
-  _SignupScreenState createState() => _SignupScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
 class _SignupScreenState extends State<SignupScreen> {
